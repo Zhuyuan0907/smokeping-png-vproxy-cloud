@@ -14,28 +14,28 @@
         body {
             background: #0f1419;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
-            padding: 20px;
+            padding: 15px;
             color: #e8eaed;
             min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 15px;
-            padding: 10px;
+            margin-bottom: 10px;
+            padding: 5px;
         }
 
         h1 {
             color: #ffffff;
-            font-size: 28px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 3px;
             font-weight: 600;
             letter-spacing: -0.5px;
         }
 
         .subtitle {
             color: #8b92a6;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 400;
         }
 
@@ -43,25 +43,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
-            padding: 5px;
+            padding: 0;
         }
 
         .time-selector {
             display: inline-flex;
-            gap: 4px;
+            gap: 3px;
         }
 
         .time-btn {
-            padding: 6px 14px;
+            padding: 5px 12px;
             border: none;
             background-color: transparent;
             color: #6c7280;
             cursor: pointer;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             transition: all 0.15s ease;
             font-weight: 500;
         }
@@ -78,80 +78,50 @@
         .refresh-info {
             color: #6c7280;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 12px;
-            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 11px;
+            padding: 5px;
         }
 
         .section {
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            color: #ffffff;
-            font-size: 16px;
-            margin-bottom: 15px;
-            padding: 10px 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .badge {
-            display: inline-block;
-            background: rgba(0, 168, 255, 0.12);
-            color: #00a8ff;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 500;
+            margin-bottom: 0;
         }
 
         .charts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
-            gap: 15px;
+            gap: 12px;
         }
 
         .chart-wrapper {
-            background: #1a1f2e;
-            border-radius: 6px;
-            padding: 14px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: all 0.2s ease;
-        }
-
-        .chart-wrapper:hover {
-            border-color: rgba(0, 168, 255, 0.25);
-            box-shadow: 0 4px 15px rgba(0, 168, 255, 0.12);
+            background: transparent;
+            padding: 0;
+            margin-bottom: 12px;
         }
 
         .chart-title {
-            color: #e8eaed;
-            font-size: 13px;
-            margin-bottom: 10px;
+            color: #8b92a6;
+            font-size: 12px;
+            margin-bottom: 6px;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 7px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            gap: 6px;
+            padding: 0;
         }
 
         .chart-title .icon {
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
             background: #00a8ff;
             border-radius: 50%;
-            box-shadow: 0 0 6px rgba(0, 168, 255, 0.5);
+            box-shadow: 0 0 4px rgba(0, 168, 255, 0.4);
         }
 
         .chart-wrapper img {
             width: 100%;
             height: auto;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: none;
             border-radius: 4px;
             background-color: #ffffff;
             display: block;
@@ -160,9 +130,9 @@
         .last-update {
             color: #6c7280;
             text-align: center;
-            margin-top: 20px;
-            font-size: 11px;
-            padding: 8px;
+            margin-top: 15px;
+            font-size: 10px;
+            padding: 5px;
         }
 
         @media (max-width: 1400px) {
@@ -173,20 +143,43 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 8px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 20px;
+            }
+
+            .subtitle {
+                font-size: 11px;
             }
 
             .header {
-                padding: 10px 5px;
-                margin-bottom: 10px;
+                padding: 5px;
+                margin-bottom: 8px;
             }
 
             .controls {
-                padding: 5px;
+                margin-bottom: 8px;
+            }
+
+            .refresh-info {
+                margin-bottom: 10px;
+                font-size: 10px;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .chart-wrapper {
+                margin-bottom: 10px;
+            }
+
+            .chart-title {
+                font-size: 11px;
+                margin-bottom: 5px;
             }
         }
     </style>
@@ -282,16 +275,10 @@
 
             const data = chartData[currentRange];
 
-            // 單一區塊顯示所有節點
+            // 直接顯示所有節點
             const section = document.createElement('div');
             section.className = 'section';
-            section.innerHTML = `
-                <div class="section-title">
-                    網路監控節點
-                    <span class="badge">${data.length} 節點</span>
-                </div>
-                <div class="charts-container" id="all-charts"></div>
-            `;
+            section.innerHTML = `<div class="charts-container" id="all-charts"></div>`;
             content.appendChild(section);
 
             const container = document.getElementById('all-charts');
