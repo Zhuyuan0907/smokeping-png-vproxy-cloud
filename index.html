@@ -14,15 +14,25 @@
 
         body {
             background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             padding: 20px;
+            color: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         h1 {
             color: #ffffff;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 28px;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888888;
+            font-size: 14px;
         }
 
         .controls {
@@ -30,7 +40,7 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
@@ -40,19 +50,20 @@
         }
 
         .time-btn {
-            padding: 8px 20px;
-            border: 1px solid #555;
+            padding: 10px 24px;
+            border: 1px solid #444;
             background-color: #2a2a2a;
             color: #aaaaaa;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
             transition: all 0.2s;
+            font-weight: 500;
         }
 
         .time-btn:hover {
             background-color: #3a3a3a;
-            border-color: #666;
+            border-color: #555;
         }
 
         .time-btn.active {
@@ -62,19 +73,20 @@
         }
 
         .copy-btn {
-            padding: 8px 20px;
-            border: 1px solid #555;
-            background-color: #2a2a2a;
+            padding: 10px 24px;
+            border: 1px solid #4a90e2;
+            background-color: #4a90e2;
             color: #ffffff;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
             transition: all 0.2s;
+            font-weight: 500;
         }
 
         .copy-btn:hover {
-            background-color: #3a3a3a;
-            border-color: #666;
+            background-color: #357abd;
+            border-color: #357abd;
         }
 
         .copy-btn:disabled {
@@ -83,40 +95,92 @@
         }
 
         .refresh-info {
-            color: #aaaaaa;
+            color: #888888;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-size: 14px;
+            background-color: #252525;
+            padding: 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+            font-weight: 600;
+        }
+
+        .section-title .badge {
+            display: inline-block;
+            background-color: #4a90e2;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+            font-weight: normal;
         }
 
         .charts-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
             gap: 20px;
-            max-width: 1800px;
-            margin: 0 auto;
         }
 
         .chart-wrapper {
-            background-color: #2a2a2a;
+            background-color: #252525;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            transition: all 0.2s;
+        }
+
+        .chart-wrapper:hover {
+            border-color: #444;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        }
+
+        .chart-title {
+            color: #ffffff;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-title .icon {
+            width: 8px;
+            height: 8px;
+            background-color: #4a90e2;
+            border-radius: 50%;
         }
 
         .chart-wrapper img {
             width: 100%;
             height: auto;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             background-color: #ffffff;
             display: block;
         }
 
         .last-update {
-            color: #888888;
+            color: #666666;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 12px;
         }
 
@@ -124,20 +188,21 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 12px 20px;
+            padding: 15px 25px;
             background-color: #4a90e2;
             color: white;
-            border-radius: 4px;
+            border-radius: 6px;
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1000;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
         }
 
         .copy-status.show {
             opacity: 1;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .charts-container {
                 grid-template-columns: 1fr;
             }
@@ -145,7 +210,10 @@
     </style>
 </head>
 <body>
-    <h1>SmokePing 網路監控面板</h1>
+    <div class="header">
+        <h1>SmokePing 網路監控面板</h1>
+        <div class="subtitle">即時網路延遲監控與分析</div>
+    </div>
 
     <div class="controls">
         <div class="time-selector">
@@ -160,8 +228,8 @@
         自動刷新：每 60 秒更新一次 | 下次更新：<span id="countdown">60</span> 秒
     </div>
 
-    <div class="charts-container" id="charts">
-        <!-- Charts will be loaded here -->
+    <div id="content">
+        <!-- Content will be loaded here -->
     </div>
 
     <div class="last-update">
@@ -171,57 +239,68 @@
     <div class="copy-status" id="copyStatus">已複製到剪貼板！</div>
 
     <script>
-        // 定義不同時間範圍的 SmokePing 圖片 URLs
-        const timeRanges = {
-            '3h': [
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~AWS',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt'
-            ],
-            '30h': [
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd3',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~veetime',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~tfnd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkbn',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkt'
-            ],
-            '10d': [
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN',
-                'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd3',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~veetime',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~tfnd',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkbn',
-                'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkt'
-            ]
+        // 定義圖表資料結構
+        const chartData = {
+            '3h': {
+                'zhuyuan': [
+                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
+                ],
+                'fastline': [
+                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo' },
+                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd' },
+                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3' },
+                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime' },
+                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd' },
+                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn' },
+                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt' }
+                ]
+            },
+            '30h': {
+                'zhuyuan': [
+                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
+                ],
+                'fastline': [
+                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo' },
+                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd' },
+                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd3' },
+                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~veetime' },
+                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~tfnd' },
+                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkbn' },
+                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkt' }
+                ]
+            },
+            '10d': {
+                'zhuyuan': [
+                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
+                ],
+                'fastline': [
+                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo' },
+                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd' },
+                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd3' },
+                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~veetime' },
+                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~tfnd' },
+                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkbn' },
+                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkt' }
+                ]
+            }
         };
 
         let currentRange = '3h';
@@ -231,21 +310,71 @@
 
         // 載入所有圖表
         function loadCharts() {
-            const container = document.getElementById('charts');
-            container.innerHTML = '';
+            const content = document.getElementById('content');
+            content.innerHTML = '';
 
-            const urls = timeRanges[currentRange];
-            urls.forEach((url, index) => {
+            const data = chartData[currentRange];
+
+            // Zhuyuan.tw 區塊
+            const zhuyuanSection = document.createElement('div');
+            zhuyuanSection.className = 'section';
+            zhuyuanSection.innerHTML = `
+                <div class="section-title">
+                    smokeping.zhuyuan.tw
+                    <span class="badge">${data.zhuyuan.length} 節點</span>
+                </div>
+                <div class="charts-container" id="zhuyuan-charts"></div>
+            `;
+            content.appendChild(zhuyuanSection);
+
+            const zhuyuanContainer = document.getElementById('zhuyuan-charts');
+            data.zhuyuan.forEach(chart => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chart-wrapper';
 
+                const title = document.createElement('div');
+                title.className = 'chart-title';
+                title.innerHTML = `<span class="icon"></span>${chart.title}`;
+
                 const img = document.createElement('img');
-                img.src = url + '&_=' + new Date().getTime();
-                img.alt = 'SmokePing Chart ' + (index + 1);
+                img.src = chart.url + '&_=' + new Date().getTime();
+                img.alt = chart.title;
                 img.loading = 'lazy';
 
+                wrapper.appendChild(title);
                 wrapper.appendChild(img);
-                container.appendChild(wrapper);
+                zhuyuanContainer.appendChild(wrapper);
+            });
+
+            // Fast-line.tw 區塊
+            const fastlineSection = document.createElement('div');
+            fastlineSection.className = 'section';
+            fastlineSection.innerHTML = `
+                <div class="section-title">
+                    smokeping.fast-line.tw
+                    <span class="badge">${data.fastline.length} 節點</span>
+                </div>
+                <div class="charts-container" id="fastline-charts"></div>
+            `;
+            content.appendChild(fastlineSection);
+
+            const fastlineContainer = document.getElementById('fastline-charts');
+            data.fastline.forEach(chart => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'chart-wrapper';
+
+                const title = document.createElement('div');
+                title.className = 'chart-title';
+                title.innerHTML = `<span class="icon"></span>${chart.title}`;
+
+                const img = document.createElement('img');
+                img.src = chart.url + '&_=' + new Date().getTime();
+                img.alt = chart.title;
+                img.loading = 'lazy';
+
+                wrapper.appendChild(title);
+                wrapper.appendChild(img);
+                fastlineContainer.appendChild(wrapper);
             });
 
             updateLastUpdateTime();
@@ -289,54 +418,38 @@
         // 時間範圍切換
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                // 移除所有 active 類別
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-
-                // 加入 active 類別到當前按鈕
                 this.classList.add('active');
-
-                // 更新當前範圍
                 currentRange = this.dataset.range;
-
-                // 重新載入圖表
                 loadCharts();
-
-                // 重置倒數計時
                 startCountdown();
             });
         });
 
         // 複製所有圖表
         async function copyAllCharts() {
-            const container = document.getElementById('charts');
+            const content = document.getElementById('content');
             const copyBtn = document.querySelector('.copy-btn');
             const copyStatus = document.getElementById('copyStatus');
 
-            // 顯示處理中狀態
             copyBtn.textContent = '處理中...';
             copyBtn.disabled = true;
 
             try {
-                // 使用 html2canvas 截取整個圖表區域
-                const canvas = await html2canvas(container, {
+                const canvas = await html2canvas(content, {
                     backgroundColor: '#1a1a1a',
                     scale: 2,
                     logging: false,
-                    useCORS: true,
+                    useCORS: false,
                     allowTaint: true
                 });
 
-                // 將 canvas 轉換為 blob
                 canvas.toBlob(async (blob) => {
                     try {
-                        // 使用 Clipboard API 複製圖片
                         await navigator.clipboard.write([
-                            new ClipboardItem({
-                                'image/png': blob
-                            })
+                            new ClipboardItem({ 'image/png': blob })
                         ]);
 
-                        // 顯示成功訊息
                         copyStatus.classList.add('show');
                         setTimeout(() => {
                             copyStatus.classList.remove('show');
@@ -344,10 +457,18 @@
 
                     } catch (err) {
                         console.error('複製失敗:', err);
-                        alert('複製失敗，請檢查瀏覽器權限設定');
+
+                        // 如果 Clipboard API 失敗，提供下載選項
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `smokeping-charts-${currentRange}-${Date.now()}.png`;
+                        a.click();
+                        URL.revokeObjectURL(url);
+
+                        alert('已下載圖片到本地');
                     }
 
-                    // 恢復按鈕狀態
                     copyBtn.textContent = '一鍵複製所有圖表';
                     copyBtn.disabled = false;
                 });
@@ -355,8 +476,6 @@
             } catch (err) {
                 console.error('截圖失敗:', err);
                 alert('截圖失敗：' + err.message);
-
-                // 恢復按鈕狀態
                 copyBtn.textContent = '一鍵複製所有圖表';
                 copyBtn.disabled = false;
             }
