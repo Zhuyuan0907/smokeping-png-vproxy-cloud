@@ -239,68 +239,56 @@
     <div class="copy-status" id="copyStatus">已複製到剪貼板！</div>
 
     <script>
-        // 定義圖表資料結構
+        // 定義圖表資料結構（合併所有節點）
         const chartData = {
-            '3h': {
-                'zhuyuan': [
-                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
-                ],
-                'fastline': [
-                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo' },
-                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd' },
-                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3' },
-                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime' },
-                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd' },
-                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn' },
-                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt' }
-                ]
-            },
-            '30h': {
-                'zhuyuan': [
-                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
-                ],
-                'fastline': [
-                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo' },
-                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd' },
-                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd3' },
-                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~veetime' },
-                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~tfnd' },
-                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkbn' },
-                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkt' }
-                ]
-            },
-            '10d': {
-                'zhuyuan': [
-                    { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                    { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                    { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                    { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                    { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                    { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                    { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' }
-                ],
-                'fastline': [
-                    { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo' },
-                    { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd' },
-                    { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd3' },
-                    { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~veetime' },
-                    { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~tfnd' },
-                    { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkbn' },
-                    { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkt' }
-                ]
-            }
+            '3h': [
+                { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo' },
+                { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd' },
+                { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3' },
+                { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime' },
+                { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd' },
+                { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn' },
+                { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt' }
+            ],
+            '30h': [
+                { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo' },
+                { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd' },
+                { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd3' },
+                { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~veetime' },
+                { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~tfnd' },
+                { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkbn' },
+                { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkt' }
+            ],
+            '10d': [
+                { title: 'CoCoDigit-2 主節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                { title: 'Slave1 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                { title: 'Kevin HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                { title: 'Jason HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                { title: 'Kevin 台南 HiNet', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                { title: 'TFN 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                { title: 'TANet 節點', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                { title: 'TW-Hosting.CoCo 主節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo' },
+                { title: 'HD 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd' },
+                { title: 'HD3 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd3' },
+                { title: 'VeeTime 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~veetime' },
+                { title: 'TFND 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~tfnd' },
+                { title: 'HKBN 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkbn' },
+                { title: 'HKT 節點', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkt' }
+            ]
         };
 
         let currentRange = '3h';
@@ -315,20 +303,20 @@
 
             const data = chartData[currentRange];
 
-            // Zhuyuan.tw 區塊
-            const zhuyuanSection = document.createElement('div');
-            zhuyuanSection.className = 'section';
-            zhuyuanSection.innerHTML = `
+            // 單一區塊顯示所有節點
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = `
                 <div class="section-title">
-                    smokeping.zhuyuan.tw
-                    <span class="badge">${data.zhuyuan.length} 節點</span>
+                    SmokePing 監控節點
+                    <span class="badge">${data.length} 節點</span>
                 </div>
-                <div class="charts-container" id="zhuyuan-charts"></div>
+                <div class="charts-container" id="all-charts"></div>
             `;
-            content.appendChild(zhuyuanSection);
+            content.appendChild(section);
 
-            const zhuyuanContainer = document.getElementById('zhuyuan-charts');
-            data.zhuyuan.forEach(chart => {
+            const container = document.getElementById('all-charts');
+            data.forEach(chart => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chart-wrapper';
 
@@ -340,41 +328,12 @@
                 img.src = chart.url + '&_=' + new Date().getTime();
                 img.alt = chart.title;
                 img.loading = 'lazy';
+                // 設置 crossOrigin 以支援 CORS
+                img.crossOrigin = 'anonymous';
 
                 wrapper.appendChild(title);
                 wrapper.appendChild(img);
-                zhuyuanContainer.appendChild(wrapper);
-            });
-
-            // Fast-line.tw 區塊
-            const fastlineSection = document.createElement('div');
-            fastlineSection.className = 'section';
-            fastlineSection.innerHTML = `
-                <div class="section-title">
-                    smokeping.fast-line.tw
-                    <span class="badge">${data.fastline.length} 節點</span>
-                </div>
-                <div class="charts-container" id="fastline-charts"></div>
-            `;
-            content.appendChild(fastlineSection);
-
-            const fastlineContainer = document.getElementById('fastline-charts');
-            data.fastline.forEach(chart => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'chart-wrapper';
-
-                const title = document.createElement('div');
-                title.className = 'chart-title';
-                title.innerHTML = `<span class="icon"></span>${chart.title}`;
-
-                const img = document.createElement('img');
-                img.src = chart.url + '&_=' + new Date().getTime();
-                img.alt = chart.title;
-                img.loading = 'lazy';
-
-                wrapper.appendChild(title);
-                wrapper.appendChild(img);
-                fastlineContainer.appendChild(wrapper);
+                container.appendChild(wrapper);
             });
 
             updateLastUpdateTime();
@@ -440,8 +399,8 @@
                     backgroundColor: '#1a1a1a',
                     scale: 2,
                     logging: false,
-                    useCORS: false,
-                    allowTaint: true
+                    useCORS: true,
+                    allowTaint: false
                 });
 
                 canvas.toBlob(async (blob) => {
