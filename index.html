@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmokePing 監控面板</title>
+    <title>vProxy Cloud 連線品質監測</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
@@ -13,26 +13,34 @@
         }
 
         body {
-            background-color: #1a1a1a;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            padding: 20px;
-            color: #ffffff;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
+            padding: 30px 20px;
+            color: #2c3e50;
+            min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
+            background: white;
+            padding: 35px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
         }
 
         h1 {
-            color: #ffffff;
-            font-size: 32px;
-            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 36px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .subtitle {
-            color: #888888;
-            font-size: 14px;
+            color: #7f8c8d;
+            font-size: 15px;
+            font-weight: 400;
         }
 
         .controls {
@@ -42,160 +50,183 @@
             gap: 15px;
             margin-bottom: 25px;
             flex-wrap: wrap;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
         }
 
         .time-selector {
             display: flex;
-            gap: 8px;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 5px;
+            border-radius: 8px;
         }
 
         .time-btn {
-            padding: 10px 24px;
-            border: 1px solid #444;
-            background-color: #2a2a2a;
-            color: #aaaaaa;
+            padding: 10px 22px;
+            border: none;
+            background-color: transparent;
+            color: #5a6c7d;
             cursor: pointer;
             border-radius: 6px;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             font-weight: 500;
         }
 
         .time-btn:hover {
-            background-color: #3a3a3a;
-            border-color: #555;
+            background-color: #e9ecef;
+            color: #2c3e50;
         }
 
         .time-btn.active {
-            background-color: #4a90e2;
+            background-color: #3498db;
             color: #ffffff;
-            border-color: #4a90e2;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
         }
 
         .copy-btn {
             padding: 10px 24px;
-            border: 1px solid #4a90e2;
-            background-color: #4a90e2;
-            color: #ffffff;
+            border: 2px solid #3498db;
+            background-color: white;
+            color: #3498db;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            transition: all 0.2s;
-            font-weight: 500;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .copy-btn:hover {
-            background-color: #357abd;
-            border-color: #357abd;
+            background-color: #3498db;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
         }
 
         .copy-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .refresh-info {
-            color: #888888;
+            color: #5a6c7d;
             text-align: center;
             margin-bottom: 30px;
             font-size: 14px;
-            background-color: #252525;
-            padding: 12px;
-            border-radius: 6px;
+            background-color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
             display: inline-block;
             margin-left: 50%;
             transform: translateX(-50%);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid #3498db;
         }
 
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .section-title {
-            color: #ffffff;
-            font-size: 20px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #333;
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 8px;
             font-weight: 600;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+            border-left: 5px solid #3498db;
         }
 
         .section-title .badge {
             display: inline-block;
-            background-color: #4a90e2;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-            font-weight: normal;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-left: 12px;
+            font-weight: 500;
         }
 
         .charts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
 
         .chart-wrapper {
-            background-color: #252525;
-            border-radius: 8px;
-            padding: 18px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-            transition: all 0.2s;
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            transition: all 0.3s ease;
         }
 
         .chart-wrapper:hover {
-            border-color: #444;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border-color: #3498db;
         }
 
         .chart-title {
-            color: #ffffff;
-            font-size: 15px;
-            margin-bottom: 10px;
+            color: #34495e;
+            font-size: 16px;
+            margin-bottom: 12px;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f3f5;
         }
 
         .chart-title .icon {
-            width: 8px;
-            height: 8px;
-            background-color: #4a90e2;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
         }
 
         .chart-wrapper img {
             width: 100%;
             height: auto;
-            border: none;
-            border-radius: 6px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
             background-color: #ffffff;
             display: block;
         }
 
         .last-update {
-            color: #666666;
+            color: #7f8c8d;
             text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
+            margin-top: 40px;
+            font-size: 13px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
         }
 
         .copy-status {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background-color: #4a90e2;
+            top: 30px;
+            right: 30px;
+            padding: 16px 28px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 6px;
+            border-radius: 10px;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            font-weight: 500;
         }
 
         .copy-status.show {
@@ -207,11 +238,29 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .controls {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>SmokePing 網路監控面板</h1>
+        <h1>vProxy Cloud 連線品質監測</h1>
         <div class="subtitle">即時網路延遲監控與分析</div>
     </div>
 
@@ -308,7 +357,7 @@
             section.className = 'section';
             section.innerHTML = `
                 <div class="section-title">
-                    SmokePing 監控節點
+                    網路監控節點
                     <span class="badge">${data.length} 節點</span>
                 </div>
                 <div class="charts-container" id="all-charts"></div>
@@ -328,8 +377,6 @@
                 img.src = chart.url + '&_=' + new Date().getTime();
                 img.alt = chart.title;
                 img.loading = 'lazy';
-                // 設置 crossOrigin 以支援 CORS
-                img.crossOrigin = 'anonymous';
 
                 wrapper.appendChild(title);
                 wrapper.appendChild(img);
@@ -396,11 +443,11 @@
 
             try {
                 const canvas = await html2canvas(content, {
-                    backgroundColor: '#1a1a1a',
+                    backgroundColor: '#f5f7fa',
                     scale: 2,
                     logging: false,
-                    useCORS: true,
-                    allowTaint: false
+                    useCORS: false,
+                    allowTaint: true
                 });
 
                 canvas.toBlob(async (blob) => {
