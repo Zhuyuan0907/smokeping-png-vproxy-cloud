@@ -46,12 +46,13 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
-        .chart-wrapper iframe {
+        .chart-wrapper img {
             width: 100%;
-            height: 400px;
+            height: auto;
             border: none;
             border-radius: 4px;
             background-color: #ffffff;
+            display: block;
         }
 
         .last-update {
@@ -83,23 +84,23 @@
     </div>
 
     <script>
-        // SmokePing 圖表 URLs
+        // SmokePing 圖片 URLs (使用 displaymode=a 直接獲取圖片)
         const chartUrls = [
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~AWS',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN',
-            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=n;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn',
-            'https://smokeping.fast-line.tw/?displaymode=n;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt'
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~AWS',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN',
+            'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn',
+            'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt'
         ];
 
         let countdownValue = 10;
@@ -114,12 +115,13 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chart-wrapper';
 
-                const iframe = document.createElement('iframe');
-                // 加上時間戳參數強制刷新
-                iframe.src = url + '&_=' + new Date().getTime();
-                iframe.scrolling = 'no';
+                const img = document.createElement('img');
+                // 加上時間戳參數強制刷新，並使用 end=now 確保獲取最新數據
+                img.src = url + '&_=' + new Date().getTime();
+                img.alt = 'SmokePing Chart ' + (index + 1);
+                img.loading = 'lazy';
 
-                wrapper.appendChild(iframe);
+                wrapper.appendChild(img);
                 container.appendChild(wrapper);
             });
 
