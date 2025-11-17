@@ -902,9 +902,15 @@
                 if (bgpPrefix && primaryData.asn) {
                     document.getElementById('bgpSection').style.display = 'block';
                     document.getElementById('bgpLink').href = `https://bgp.tools/prefix/${bgpPrefix}#connectivity`;
-                    // Use correct pathimg URL format: rt-{prefix with / replaced by _}
+                    // Use correct pathimg URL format: rt-{prefix with / replaced by _}?uuid
                     const pathimgPrefix = bgpPrefix.replace('/', '_');
-                    document.getElementById('bgpGraph').src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}`;
+                    // Generate a UUID for the request
+                    const uuid = crypto.randomUUID ? crypto.randomUUID() :
+                        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                            const r = Math.random() * 16 | 0;
+                            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                        });
+                    document.getElementById('bgpGraph').src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}?${uuid}`;
                 }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
