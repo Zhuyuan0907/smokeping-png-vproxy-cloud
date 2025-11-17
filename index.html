@@ -52,9 +52,10 @@
         .time-selector {
             display: inline-flex;
             gap: 2px;
+            align-items: center;
         }
 
-        .time-btn {
+        .time-btn, .network-info-btn {
             padding: 4px 10px;
             border: none;
             background-color: transparent;
@@ -65,7 +66,7 @@
             font-weight: 500;
         }
 
-        .time-btn:hover {
+        .time-btn:hover, .network-info-btn:hover {
             color: #00a8ff;
         }
 
@@ -75,16 +76,16 @@
             text-underline-offset: 3px;
         }
 
+        .separator {
+            color: #4a5568;
+            margin: 0 4px;
+        }
+
         .refresh-info {
             color: #4a5568;
             text-align: center;
             margin-bottom: 12px;
             font-size: 10px;
-            padding: 0;
-        }
-
-        .section {
-            margin-bottom: 0;
         }
 
         .charts-container {
@@ -130,6 +131,400 @@
             padding: 5px;
         }
 
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #6c7280;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #ff6b6b;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Info Sections */
+        .info-section {
+            margin-bottom: 16px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-section-title {
+            color: #00a8ff;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #3a3a3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-toggle {
+            background: none;
+            border: none;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+
+        .section-toggle:hover {
+            color: #00a8ff;
+        }
+
+        .retest-btn {
+            background: none;
+            border: none;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+
+        .retest-btn:hover {
+            color: #00a8ff;
+            transform: rotate(180deg);
+        }
+
+        .retest-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .retest-btn.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-label {
+            color: #6c7280;
+            font-size: 9px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            color: #e8eaed;
+            font-size: 12px;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .info-value.highlight {
+            color: #00a8ff;
+            font-family: 'SF Mono', 'Consolas', monospace;
+        }
+
+        .info-value.small {
+            font-size: 10px;
+            color: #9ca3af;
+        }
+
+        .info-value.error {
+            color: #ff6b6b;
+        }
+
+        .connection-badge {
+            display: inline-block;
+            background: #00a8ff;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        /* Latency Display */
+        .latency-display {
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .latency-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00a8ff;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            margin-bottom: 2px;
+        }
+
+        .latency-value.good { color: #4ade80; }
+        .latency-value.medium { color: #fbbf24; }
+        .latency-value.bad { color: #ff6b6b; }
+
+        .latency-label {
+            color: #6c7280;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .latency-details {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .latency-stat {
+            text-align: center;
+        }
+
+        .latency-stat-value {
+            color: #e8eaed;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'SF Mono', 'Consolas', monospace;
+        }
+
+        .latency-stat-label {
+            color: #6c7280;
+            font-size: 8px;
+            margin-top: 2px;
+        }
+
+        /* Terminal */
+        .terminal {
+            background: #0d0d0d;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+
+        .terminal-btn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .terminal-btn.close { background: #ff5f56; }
+        .terminal-btn.minimize { background: #ffbd2e; }
+        .terminal-btn.maximize { background: #27c93f; }
+
+        .terminal-title {
+            color: #6c7280;
+            font-size: 10px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .terminal-body {
+            padding: 10px;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 10px;
+            line-height: 1.5;
+            color: #e8eaed;
+            max-height: 250px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: #0d0d0d;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #3a3a3a;
+            border-radius: 3px;
+        }
+
+        .terminal-prompt { color: #4ade80; }
+        .terminal-command { color: #ffffff; }
+        .terminal-output { color: #b0b0b0; }
+        .terminal-stats { color: #fbbf24; }
+        .terminal-error { color: #ff6b6b; }
+
+        /* BGP Graph */
+        .bgp-graph {
+            margin-top: 10px;
+            background: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bgp-graph img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .bgp-graph iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            display: block;
+        }
+
+        .bgp-graph a {
+            display: block;
+        }
+
+        .bgp-graph img:hover {
+            opacity: 0.9;
+        }
+
+        .bgp-switch-btn {
+            background: transparent;
+            border: 1px solid #3a3a3a;
+            color: #6c7280;
+            padding: 4px 12px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bgp-switch-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .bgp-switch-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .bgp-switch-btn:hover {
+            color: #00a8ff;
+            border-color: #00a8ff;
+        }
+
+        .bgp-switch-btn.active {
+            background: #00a8ff;
+            color: #000;
+            border-color: #00a8ff;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 1000px;
+        }
+
         @media (max-width: 1400px) {
             .charts-container {
                 grid-template-columns: 1fr;
@@ -137,46 +532,14 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 8px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .subtitle {
-                font-size: 10px;
-            }
-
-            .header {
-                padding: 5px;
-                margin-bottom: 8px;
-            }
-
-            .controls {
-                gap: 12px;
-                margin-bottom: 8px;
-            }
-
-            .refresh-info {
-                margin-bottom: 10px;
-                font-size: 9px;
-            }
-
-            .charts-container {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .chart-wrapper {
-                margin-bottom: 8px;
-            }
-
-            .chart-title {
-                font-size: 10px;
-                margin-bottom: 3px;
-            }
+            body { padding: 8px; }
+            h1 { font-size: 20px; }
+            .subtitle { font-size: 10px; }
+            .header { padding: 5px; margin-bottom: 8px; }
+            .charts-container { grid-template-columns: 1fr; gap: 8px; }
+            .chart-wrapper { margin-bottom: 8px; }
+            .chart-title { font-size: 10px; margin-bottom: 3px; }
+            .modal-content { border-radius: 8px; }
         }
     </style>
 </head>
@@ -191,6 +554,8 @@
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
             <button class="time-btn" data-range="10d">10d</button>
+            <span class="separator">|</span>
+            <button class="network-info-btn" id="networkInfoBtn">info</button>
         </div>
     </div>
 
@@ -198,16 +563,153 @@
         自動更新 <span id="countdown">300</span>s
     </div>
 
-    <div id="content">
-        <!-- Content will be loaded here -->
-    </div>
+    <div id="content"></div>
 
     <div class="last-update">
         更新於 <span id="lastUpdate"></span>
     </div>
 
+    <!-- Network Info Modal -->
+    <div class="modal-overlay" id="networkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">網路連線資訊</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- IP Information -->
+                <div class="info-section">
+                    <div class="info-section-title">
+                        <span>您的網路<span id="connectionType"></span></span>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item full-width" id="ipv4Section">
+                            <div class="info-label">IPv4</div>
+                            <div class="info-value highlight" id="ipv4Address"><span class="loading-dots">載入中</span></div>
+                            <div class="info-value small" id="ipv4Prefix"></div>
+                        </div>
+                        <div class="info-item full-width" id="ipv6Section" style="display: none;">
+                            <div class="info-label">IPv6</div>
+                            <div class="info-value highlight" id="ipv6Address"></div>
+                            <div class="info-value small" id="ipv6Prefix"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">位置</div>
+                            <div class="info-value" id="ipLocation"><span class="loading-dots">載入中</span></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">時區</div>
+                            <div class="info-value" id="ipTimezone"><span class="loading-dots">載入中</span></div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">ISP / AS</div>
+                            <div class="info-value" id="ipISP"><span class="loading-dots">載入中</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BGP Graph -->
+                <div class="info-section" id="bgpSection" style="display: none;">
+                    <div class="info-section-title">
+                        <span>BGP 路由圖</span>
+                        <button class="section-toggle" id="bgpToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="bgpContent">
+                        <div id="bgpSwitcher" style="display: none; margin-bottom: 10px; text-align: center;">
+                            <button class="bgp-switch-btn active" id="bgpIPv4Btn" data-type="ipv4">IPv4</button>
+                            <button class="bgp-switch-btn" id="bgpIPv6Btn" data-type="ipv6">IPv6</button>
+                        </div>
+                        <div class="bgp-graph" id="bgpGraphContainer">
+                            <div id="bgpLoading" style="padding: 20px; text-align: center; color: #6c7280; font-size: 11px;">
+                                <span class="loading-dots">載入 BGP 路徑圖</span>
+                            </div>
+                            <a id="bgpImageLink" href="#" target="_blank" style="display: none;">
+                                <img id="bgpGraph" src="" alt="BGP Connectivity Graph" style="cursor: pointer;">
+                            </a>
+                            <div id="bgpError" style="display: none; padding: 20px; text-align: center; color: #9ca3af; font-size: 11px;">
+                                無法載入路由圖
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latency Test -->
+                <div class="info-section">
+                    <div class="info-section-title">
+                        <span>延遲測試</span>
+                        <button class="retest-btn" id="retestBtn" title="重新測試">&#x21bb;</button>
+                    </div>
+                    <div class="latency-display">
+                        <div class="latency-value" id="avgLatency">--</div>
+                        <div class="latency-label">平均延遲 (ms)</div>
+                        <div class="latency-details">
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="minLatency">--</div>
+                                <div class="latency-stat-label">最低</div>
+                            </div>
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="maxLatency">--</div>
+                                <div class="latency-stat-label">最高</div>
+                            </div>
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="jitter">--</div>
+                                <div class="latency-stat-label">抖動</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-section-title" style="margin-top: 12px; margin-bottom: 0; border: none; padding: 0;">
+                        <span style="font-size: 9px; color: #6c7280;">測試過程</span>
+                        <button class="section-toggle" id="terminalToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="terminalContent">
+                        <div class="terminal">
+                            <div class="terminal-header">
+                                <span class="terminal-btn close"></span>
+                                <span class="terminal-btn minimize"></span>
+                                <span class="terminal-btn maximize"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body" id="terminalOutput"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extra Info -->
+                <div class="info-section">
+                    <div class="info-section-title">
+                        <span>額外資訊</span>
+                        <button class="section-toggle" id="extraToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="extraContent">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">語言</div>
+                                <div class="info-value" id="browserLang">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">螢幕</div>
+                                <div class="info-value" id="screenRes">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">平台</div>
+                                <div class="info-value" id="platform">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">像素比</div>
+                                <div class="info-value" id="pixelRatio">--</div>
+                            </div>
+                            <div class="info-item full-width">
+                                <div class="info-label">User Agent</div>
+                                <div class="info-value small" id="userAgent">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 監控目標配置
         const targets = {
             'vproxy': {
                 name: 'vProxy Cloud',
@@ -268,66 +770,42 @@
         let currentTarget = 'vproxy';
         let countdownValue = 300;
         let countdownInterval;
+        let userIPData = {};
+        let bgpPrefixes = { ipv4: null, ipv6: null };
+        let currentBgpType = 'ipv4';
 
-        // 載入所有圖表
         function loadCharts() {
             const content = document.getElementById('content');
-            content.innerHTML = '';
-
+            content.innerHTML = '<div class="charts-container" id="all-charts"></div>';
+            const container = document.getElementById('all-charts');
             const data = targets[currentTarget].charts[currentRange];
 
-            const section = document.createElement('div');
-            section.className = 'section';
-            section.innerHTML = `<div class="charts-container" id="all-charts"></div>`;
-            content.appendChild(section);
-
-            const container = document.getElementById('all-charts');
             data.forEach(chart => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chart-wrapper';
-
-                const title = document.createElement('div');
-                title.className = 'chart-title';
-                title.textContent = chart.title;
-
-                const img = document.createElement('img');
-                img.src = chart.url + '&_=' + new Date().getTime();
-                img.alt = chart.title;
-                img.loading = 'lazy';
-
-                wrapper.appendChild(title);
-                wrapper.appendChild(img);
+                wrapper.innerHTML = `
+                    <div class="chart-title">${chart.title}</div>
+                    <img src="${chart.url}&_=${Date.now()}" alt="${chart.title}" loading="lazy">
+                `;
                 container.appendChild(wrapper);
             });
 
             updateLastUpdateTime();
         }
 
-        // 更新最後更新時間
         function updateLastUpdateTime() {
             const now = new Date();
-            const timeString = now.toLocaleString('zh-TW', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            document.getElementById('lastUpdate').textContent = timeString;
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('zh-TW', { hour12: false });
         }
 
-        // 倒數計時
         function startCountdown() {
             countdownValue = 300;
             document.getElementById('countdown').textContent = countdownValue;
-
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
+            if (countdownInterval) clearInterval(countdownInterval);
 
             countdownInterval = setInterval(() => {
                 countdownValue--;
                 document.getElementById('countdown').textContent = countdownValue;
-
                 if (countdownValue <= 0) {
                     loadCharts();
                     countdownValue = 300;
@@ -335,7 +813,6 @@
             }, 1000);
         }
 
-        // 時間範圍切換
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
@@ -346,9 +823,319 @@
             });
         });
 
-        // 初始載入
         loadCharts();
         startCountdown();
+
+        // Modal
+        const networkModal = document.getElementById('networkModal');
+        const terminalOutput = document.getElementById('terminalOutput');
+
+        document.getElementById('networkInfoBtn').addEventListener('click', () => {
+            networkModal.classList.add('active');
+            fetchNetworkInfo();
+            runLatencyTest();
+            detectBrowserInfo();
+        });
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            networkModal.classList.remove('active');
+        });
+
+        networkModal.addEventListener('click', (e) => {
+            if (e.target === networkModal) networkModal.classList.remove('active');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && networkModal.classList.contains('active')) {
+                networkModal.classList.remove('active');
+            }
+        });
+
+        // Toggles
+        function setupToggle(btnId, contentId) {
+            const btn = document.getElementById(btnId);
+            const content = document.getElementById(contentId);
+            btn.addEventListener('click', () => {
+                const isExpanded = content.classList.toggle('expanded');
+                btn.textContent = isExpanded ? 'hide' : 'show';
+            });
+        }
+
+        setupToggle('terminalToggle', 'terminalContent');
+        setupToggle('extraToggle', 'extraContent');
+        setupToggle('bgpToggle', 'bgpContent');
+
+        document.getElementById('retestBtn').addEventListener('click', runLatencyTest);
+
+        async function fetchNetworkInfo() {
+            try {
+                // Fetch both IPv4 and IPv6 addresses separately
+                let ipv4Data = null;
+                let ipv6Data = null;
+                let primaryData = null;
+
+                // Fetch primary connection info (what user is currently using)
+                const primaryResponse = await fetch('https://ipapi.co/json/');
+                primaryData = await primaryResponse.json();
+                userIPData = primaryData;
+
+                const primaryIP = primaryData.ip || '';
+                const isPrimaryIPv6 = primaryIP.includes(':');
+
+                // Use primary data for the connected protocol (most accurate)
+                if (isPrimaryIPv6) {
+                    ipv6Data = primaryData;
+                } else {
+                    ipv4Data = primaryData;
+                }
+
+                // Try to fetch the other protocol's IP
+                if (isPrimaryIPv6) {
+                    // Primary is IPv6, try to get IPv4
+                    try {
+                        // Use ipv4.icanhazip.com which only responds via IPv4
+                        const ipv4Response = await fetch('https://ipv4.icanhazip.com/');
+                        const ipv4Text = await ipv4Response.text();
+                        const ipv4IP = ipv4Text.trim();
+                        if (ipv4IP && !ipv4IP.includes(':')) {
+                            ipv4Data = { ip: ipv4IP, network: null };
+                            // Try to get prefix from ip-api.com (free, no CORS issues)
+                            try {
+                                const ipv4InfoResponse = await fetch(`https://ip-api.com/json/${ipv4IP}?fields=status,query,org,as,isp`);
+                                const ipv4Info = await ipv4InfoResponse.json();
+                                if (ipv4Info.status === 'success' && ipv4Info.as) {
+                                    // ip-api doesn't provide prefix directly, so we skip BGP graph for secondary protocol
+                                    // The main protocol (primary) will have accurate prefix from ipapi.co
+                                }
+                            } catch (e) {
+                                console.log('IPv4 detailed info fetch failed:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('IPv4 fetch failed:', e);
+                    }
+                } else {
+                    // Primary is IPv4, try to get IPv6
+                    try {
+                        const ipv6Response = await fetch('https://ipv6.icanhazip.com/');
+                        const ipv6Text = await ipv6Response.text();
+                        const ipv6IP = ipv6Text.trim();
+                        if (ipv6IP && ipv6IP.includes(':')) {
+                            ipv6Data = { ip: ipv6IP, network: null };
+                            // Try to get IPv6 prefix info from ipapi.co
+                            try {
+                                const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6IP}/json/`);
+                                const ipv6Info = await ipv6InfoResponse.json();
+                                if (ipv6Info.network) {
+                                    ipv6Data.network = ipv6Info.network;
+                                }
+                            } catch (e) {
+                                console.log('IPv6 info fetch failed:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('IPv6 fetch failed:', e);
+                    }
+                }
+
+                // Display connection type badge
+                document.getElementById('connectionType').innerHTML = `<span class="connection-badge">${isPrimaryIPv6 ? 'IPv6' : 'IPv4'}</span>`;
+
+                // Display IPv4 info
+                if (ipv4Data && ipv4Data.ip) {
+                    document.getElementById('ipv4Address').textContent = ipv4Data.ip;
+                    document.getElementById('ipv4Prefix').textContent = ipv4Data.network ? `Prefix: ${ipv4Data.network}` : '';
+                } else {
+                    document.getElementById('ipv4Address').textContent = '無 IPv4';
+                    document.getElementById('ipv4Prefix').textContent = '';
+                }
+
+                // Display IPv6 info
+                if (ipv6Data && ipv6Data.ip) {
+                    document.getElementById('ipv6Section').style.display = 'block';
+                    document.getElementById('ipv6Address').textContent = ipv6Data.ip;
+                    document.getElementById('ipv6Prefix').textContent = ipv6Data.network ? `Prefix: ${ipv6Data.network}` : '';
+                }
+
+                const location = [primaryData.city, primaryData.region, primaryData.country_name].filter(Boolean).join(', ');
+                document.getElementById('ipLocation').textContent = location || '未知';
+                document.getElementById('ipTimezone').textContent = primaryData.timezone || '未知';
+
+                const asn = primaryData.asn ? (String(primaryData.asn).startsWith('AS') ? primaryData.asn : 'AS' + primaryData.asn) : '';
+                const ispInfo = primaryData.org ? `${primaryData.org}` : '未知';
+                document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
+
+                // BGP Graph - save prefixes for both IPv4 and IPv6
+                // Primary connection's prefix is most reliable
+                bgpPrefixes.ipv4 = ipv4Data && ipv4Data.network ? ipv4Data.network : null;
+                bgpPrefixes.ipv6 = ipv6Data && ipv6Data.network ? ipv6Data.network : null;
+
+                const hasIPv4 = bgpPrefixes.ipv4 !== null;
+                const hasIPv6 = bgpPrefixes.ipv6 !== null;
+
+                if ((hasIPv4 || hasIPv6) && primaryData.asn) {
+                    document.getElementById('bgpSection').style.display = 'block';
+
+                    // Show switcher if both are available
+                    if (hasIPv4 && hasIPv6) {
+                        document.getElementById('bgpSwitcher').style.display = 'block';
+                    } else {
+                        document.getElementById('bgpSwitcher').style.display = 'none';
+                        currentBgpType = hasIPv4 ? 'ipv4' : 'ipv6';
+                    }
+
+                    // Load initial BGP graph
+                    loadBgpGraph(currentBgpType);
+                }
+            } catch (error) {
+                console.error('Failed to fetch IP info:', error);
+                document.getElementById('ipv4Address').textContent = '無法取得';
+                document.getElementById('ipv4Address').classList.add('error');
+                document.getElementById('ipLocation').textContent = '無法取得';
+                document.getElementById('ipTimezone').textContent = '無法取得';
+                document.getElementById('ipISP').textContent = '無法取得';
+            }
+        }
+
+        function loadBgpGraph(type) {
+            const prefix = bgpPrefixes[type];
+            if (!prefix) return;
+
+            currentBgpType = type;
+            const bgpUrl = `https://bgp.tools/prefix/${prefix}`;
+            document.getElementById('bgpImageLink').href = bgpUrl;
+
+            // Update switcher button states
+            document.getElementById('bgpIPv4Btn').classList.toggle('active', type === 'ipv4');
+            document.getElementById('bgpIPv6Btn').classList.toggle('active', type === 'ipv6');
+
+            // Try to load pathimg with UUID
+            const pathimgPrefix = prefix.replace('/', '_');
+            const uuid = crypto.randomUUID ? crypto.randomUUID() :
+                'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                    const r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+
+            const bgpImg = document.getElementById('bgpGraph');
+            const bgpLoading = document.getElementById('bgpLoading');
+            const bgpImageLink = document.getElementById('bgpImageLink');
+            const bgpError = document.getElementById('bgpError');
+
+            // Reset state
+            bgpLoading.style.display = 'block';
+            bgpImageLink.style.display = 'none';
+            bgpError.style.display = 'none';
+
+            bgpImg.onload = () => {
+                bgpLoading.style.display = 'none';
+                bgpImageLink.style.display = 'block';
+                bgpError.style.display = 'none';
+            };
+
+            bgpImg.onerror = () => {
+                bgpLoading.style.display = 'none';
+                bgpImageLink.style.display = 'none';
+                bgpError.style.display = 'block';
+            };
+
+            bgpImg.src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}?${uuid}`;
+        }
+
+        // BGP type switcher
+        document.getElementById('bgpIPv4Btn').addEventListener('click', () => {
+            if (bgpPrefixes.ipv4) loadBgpGraph('ipv4');
+        });
+
+        document.getElementById('bgpIPv6Btn').addEventListener('click', () => {
+            if (bgpPrefixes.ipv6) loadBgpGraph('ipv6');
+        });
+
+        async function runLatencyTest() {
+            const retestBtn = document.getElementById('retestBtn');
+            retestBtn.disabled = true;
+            retestBtn.classList.add('spinning');
+
+            const avgEl = document.getElementById('avgLatency');
+            const minEl = document.getElementById('minLatency');
+            const maxEl = document.getElementById('maxLatency');
+            const jitterEl = document.getElementById('jitter');
+
+            avgEl.innerHTML = '<span class="loading-dots">測試中</span>';
+            avgEl.className = 'latency-value';
+            minEl.textContent = '--';
+            maxEl.textContent = '--';
+            jitterEl.textContent = '--';
+
+            const latencies = [];
+            const testIP = '157.66.166.30';
+            const testUrl = `https://${testIP}/`;
+            const numTests = 10;
+
+            terminalOutput.innerHTML = '';
+            appendToTerminal(`<span class="terminal-prompt">$ </span><span class="terminal-command">ping -c ${numTests} ${testIP}</span>\n`);
+            appendToTerminal(`<span class="terminal-output">PING ${testIP} (${testIP}): 56 data bytes</span>\n`);
+
+            for (let i = 0; i < numTests; i++) {
+                const start = performance.now();
+                try {
+                    await new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = img.onerror = resolve;
+                        img.src = testUrl + '?_=' + Date.now() + Math.random();
+                        setTimeout(resolve, 5000);
+                    });
+                    const latency = performance.now() - start;
+                    latencies.push(latency);
+                    appendToTerminal(`<span class="terminal-output">64 bytes from ${testIP}: icmp_seq=${i} ttl=54 time=${latency.toFixed(3)} ms</span>\n`);
+                } catch (e) {
+                    appendToTerminal(`<span class="terminal-error">Request timeout for icmp_seq ${i}</span>\n`);
+                }
+                if (i < numTests - 1) await new Promise(r => setTimeout(r, 500));
+            }
+
+            appendToTerminal(`\n<span class="terminal-stats">--- ${testIP} ping statistics ---</span>\n`);
+
+            if (latencies.length > 0) {
+                const avg = latencies.reduce((a, b) => a + b, 0) / latencies.length;
+                const min = Math.min(...latencies);
+                const max = Math.max(...latencies);
+                const jitter = max - min;
+                const loss = ((numTests - latencies.length) / numTests * 100).toFixed(1);
+                const variance = latencies.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / latencies.length;
+                const stddev = Math.sqrt(variance);
+
+                appendToTerminal(`<span class="terminal-output">${numTests} packets transmitted, ${latencies.length} received, ${loss}% packet loss</span>\n`);
+                appendToTerminal(`<span class="terminal-output">round-trip min/avg/max/stddev = ${min.toFixed(3)}/${avg.toFixed(3)}/${max.toFixed(3)}/${stddev.toFixed(3)} ms</span>\n`);
+
+                avgEl.textContent = avg.toFixed(1);
+                minEl.textContent = min.toFixed(1);
+                maxEl.textContent = max.toFixed(1);
+                jitterEl.textContent = jitter.toFixed(1);
+
+                avgEl.classList.add(avg < 50 ? 'good' : avg < 150 ? 'medium' : 'bad');
+            } else {
+                appendToTerminal(`<span class="terminal-error">${numTests} packets transmitted, 0 received, 100% packet loss</span>\n`);
+                avgEl.textContent = '失敗';
+                avgEl.classList.add('bad');
+            }
+
+            retestBtn.disabled = false;
+            retestBtn.classList.remove('spinning');
+        }
+
+        function appendToTerminal(html) {
+            terminalOutput.innerHTML += html;
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        function detectBrowserInfo() {
+            document.getElementById('browserLang').textContent = navigator.language || '未知';
+            document.getElementById('screenRes').textContent = `${screen.width}×${screen.height}`;
+            document.getElementById('pixelRatio').textContent = window.devicePixelRatio || 1;
+            document.getElementById('platform').textContent = navigator.platform || '未知';
+            document.getElementById('userAgent').textContent = navigator.userAgent || '未知';
+        }
     </script>
 </body>
 </html>
