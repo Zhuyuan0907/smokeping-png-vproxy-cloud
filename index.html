@@ -130,6 +130,251 @@
             padding: 5px;
         }
 
+        /* Network Info Button */
+        .network-info-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: #3a3a3a;
+            border: 1px solid #4a4a4a;
+            border-radius: 50%;
+            color: #00a8ff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .network-info-btn:hover {
+            background: #4a4a4a;
+            transform: scale(1.05);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            width: 90%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .modal-title {
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #6c7280;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #ff6b6b;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Info Sections */
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-section-title {
+            color: #00a8ff;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-label {
+            color: #6c7280;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: #e8eaed;
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .info-value.highlight {
+            color: #00a8ff;
+            font-family: 'SF Mono', 'Consolas', monospace;
+        }
+
+        .info-value.loading {
+            color: #6c7280;
+            font-style: italic;
+        }
+
+        .info-value.error {
+            color: #ff6b6b;
+        }
+
+        /* Latency Display */
+        .latency-display {
+            background: #2a2a2a;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #3a3a3a;
+        }
+
+        .latency-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00a8ff;
+            font-family: 'SF Mono', 'Consolas', monospace;
+            margin-bottom: 4px;
+        }
+
+        .latency-value.good {
+            color: #4ade80;
+        }
+
+        .latency-value.medium {
+            color: #fbbf24;
+        }
+
+        .latency-value.bad {
+            color: #ff6b6b;
+        }
+
+        .latency-label {
+            color: #6c7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .latency-details {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .latency-stat {
+            text-align: center;
+        }
+
+        .latency-stat-value {
+            color: #e8eaed;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'SF Mono', 'Consolas', monospace;
+        }
+
+        .latency-stat-label {
+            color: #6c7280;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        /* Test Button */
+        .retest-btn {
+            background: #3a3a3a;
+            border: 1px solid #4a4a4a;
+            color: #e8eaed;
+            padding: 8px 16px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .retest-btn:hover {
+            background: #4a4a4a;
+            color: #00a8ff;
+        }
+
+        .retest-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         @media (max-width: 1400px) {
             .charts-container {
                 grid-template-columns: 1fr;
@@ -204,6 +449,108 @@
 
     <div class="last-update">
         更新於 <span id="lastUpdate"></span>
+    </div>
+
+    <!-- Network Info Button -->
+    <button class="network-info-btn" id="networkInfoBtn" title="網路資訊">
+        ⚡
+    </button>
+
+    <!-- Network Info Modal -->
+    <div class="modal-overlay" id="networkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">網路連線資訊</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- IP Information -->
+                <div class="info-section">
+                    <div class="info-section-title">您的網路資訊</div>
+                    <div class="info-grid">
+                        <div class="info-item full-width">
+                            <div class="info-label">IPv4 位址</div>
+                            <div class="info-value highlight" id="ipAddress">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">國家</div>
+                            <div class="info-value" id="ipCountry">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">地區</div>
+                            <div class="info-value" id="ipRegion">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">城市</div>
+                            <div class="info-value" id="ipCity">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">時區</div>
+                            <div class="info-value" id="ipTimezone">載入中...</div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">網路服務商 (ISP)</div>
+                            <div class="info-value" id="ipISP">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">組織</div>
+                            <div class="info-value" id="ipOrg">載入中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">AS 編號</div>
+                            <div class="info-value" id="ipAS">載入中...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latency Test -->
+                <div class="info-section">
+                    <div class="info-section-title">vProxy Cloud 延遲測試</div>
+                    <div class="latency-display">
+                        <div class="latency-value" id="avgLatency">--</div>
+                        <div class="latency-label">平均延遲 (ms)</div>
+                        <div class="latency-details">
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="minLatency">--</div>
+                                <div class="latency-stat-label">最低</div>
+                            </div>
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="maxLatency">--</div>
+                                <div class="latency-stat-label">最高</div>
+                            </div>
+                            <div class="latency-stat">
+                                <div class="latency-stat-value" id="jitter">--</div>
+                                <div class="latency-stat-label">抖動</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="retest-btn" id="retestBtn">重新測試延遲</button>
+                </div>
+
+                <!-- Connection Info -->
+                <div class="info-section">
+                    <div class="info-section-title">連線狀態</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">連線類型</div>
+                            <div class="info-value" id="connType">偵測中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">下行速度</div>
+                            <div class="info-value" id="connSpeed">偵測中...</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">測試時間</div>
+                            <div class="info-value" id="testTime">--</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">測試次數</div>
+                            <div class="info-value" id="testCount">0 次</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -349,6 +696,172 @@
         // 初始載入
         loadCharts();
         startCountdown();
+
+        // ===== Network Info Modal =====
+        const networkModal = document.getElementById('networkModal');
+        const networkInfoBtn = document.getElementById('networkInfoBtn');
+        const modalClose = document.getElementById('modalClose');
+        const retestBtn = document.getElementById('retestBtn');
+        let testCount = 0;
+
+        // Open modal
+        networkInfoBtn.addEventListener('click', () => {
+            networkModal.classList.add('active');
+            fetchNetworkInfo();
+            runLatencyTest();
+            detectConnectionInfo();
+        });
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            networkModal.classList.remove('active');
+        });
+
+        // Close on backdrop click
+        networkModal.addEventListener('click', (e) => {
+            if (e.target === networkModal) {
+                networkModal.classList.remove('active');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && networkModal.classList.contains('active')) {
+                networkModal.classList.remove('active');
+            }
+        });
+
+        // Retest button
+        retestBtn.addEventListener('click', () => {
+            runLatencyTest();
+        });
+
+        // Fetch IP information
+        async function fetchNetworkInfo() {
+            try {
+                const response = await fetch('http://ip-api.com/json/?fields=status,message,country,regionName,city,timezone,isp,org,as,query');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    document.getElementById('ipAddress').textContent = data.query;
+                    document.getElementById('ipCountry').textContent = data.country || '未知';
+                    document.getElementById('ipRegion').textContent = data.regionName || '未知';
+                    document.getElementById('ipCity').textContent = data.city || '未知';
+                    document.getElementById('ipTimezone').textContent = data.timezone || '未知';
+                    document.getElementById('ipISP').textContent = data.isp || '未知';
+                    document.getElementById('ipOrg').textContent = data.org || '未知';
+                    document.getElementById('ipAS').textContent = data.as || '未知';
+                } else {
+                    throw new Error(data.message || 'API error');
+                }
+            } catch (error) {
+                console.error('Failed to fetch IP info:', error);
+                document.getElementById('ipAddress').textContent = '無法取得';
+                document.getElementById('ipAddress').classList.add('error');
+                document.getElementById('ipCountry').textContent = '無法取得';
+                document.getElementById('ipRegion').textContent = '無法取得';
+                document.getElementById('ipCity').textContent = '無法取得';
+                document.getElementById('ipTimezone').textContent = '無法取得';
+                document.getElementById('ipISP').textContent = '無法取得';
+                document.getElementById('ipOrg').textContent = '無法取得';
+                document.getElementById('ipAS').textContent = '無法取得';
+            }
+        }
+
+        // Run latency test
+        async function runLatencyTest() {
+            retestBtn.disabled = true;
+            retestBtn.textContent = '測試中...';
+
+            const avgLatencyEl = document.getElementById('avgLatency');
+            const minLatencyEl = document.getElementById('minLatency');
+            const maxLatencyEl = document.getElementById('maxLatency');
+            const jitterEl = document.getElementById('jitter');
+            const testTimeEl = document.getElementById('testTime');
+            const testCountEl = document.getElementById('testCount');
+
+            avgLatencyEl.textContent = '測試中...';
+            avgLatencyEl.className = 'latency-value';
+            minLatencyEl.textContent = '--';
+            maxLatencyEl.textContent = '--';
+            jitterEl.textContent = '--';
+
+            const latencies = [];
+            const testUrl = 'https://smokeping.zhuyuan.tw/favicon.ico';
+            const numTests = 5;
+
+            for (let i = 0; i < numTests; i++) {
+                try {
+                    const start = performance.now();
+                    await fetch(testUrl + '?_=' + Date.now() + Math.random(), {
+                        mode: 'no-cors',
+                        cache: 'no-store'
+                    });
+                    const end = performance.now();
+                    latencies.push(end - start);
+                } catch (error) {
+                    console.error('Latency test failed:', error);
+                }
+
+                // Small delay between tests
+                if (i < numTests - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+            }
+
+            if (latencies.length > 0) {
+                const avg = latencies.reduce((a, b) => a + b, 0) / latencies.length;
+                const min = Math.min(...latencies);
+                const max = Math.max(...latencies);
+                const jitter = max - min;
+
+                avgLatencyEl.textContent = avg.toFixed(1);
+                minLatencyEl.textContent = min.toFixed(1);
+                maxLatencyEl.textContent = max.toFixed(1);
+                jitterEl.textContent = jitter.toFixed(1);
+
+                // Color coding based on latency
+                if (avg < 50) {
+                    avgLatencyEl.classList.add('good');
+                } else if (avg < 150) {
+                    avgLatencyEl.classList.add('medium');
+                } else {
+                    avgLatencyEl.classList.add('bad');
+                }
+            } else {
+                avgLatencyEl.textContent = '失敗';
+                avgLatencyEl.classList.add('bad');
+            }
+
+            // Update test info
+            testCount++;
+            const now = new Date();
+            testTimeEl.textContent = now.toLocaleString('zh-TW', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            testCountEl.textContent = testCount + ' 次';
+
+            retestBtn.disabled = false;
+            retestBtn.textContent = '重新測試延遲';
+        }
+
+        // Detect connection information
+        function detectConnectionInfo() {
+            const connTypeEl = document.getElementById('connType');
+            const connSpeedEl = document.getElementById('connSpeed');
+
+            if ('connection' in navigator) {
+                const conn = navigator.connection;
+                connTypeEl.textContent = conn.effectiveType ? conn.effectiveType.toUpperCase() : '未知';
+                connSpeedEl.textContent = conn.downlink ? conn.downlink + ' Mbps' : '未知';
+            } else {
+                connTypeEl.textContent = '不支援偵測';
+                connSpeedEl.textContent = '不支援偵測';
+            }
+        }
     </script>
 </body>
 </html>
