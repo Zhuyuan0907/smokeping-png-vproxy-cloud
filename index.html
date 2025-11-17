@@ -392,6 +392,105 @@
             margin-top: 2px;
         }
 
+        /* Terminal Style */
+        .terminal {
+            background: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #2d2d2d;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+        }
+
+        .terminal-btn.close { background: #ff5f56; }
+        .terminal-btn.minimize { background: #ffbd2e; }
+        .terminal-btn.maximize { background: #27c93f; }
+
+        .terminal-title {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .terminal-body {
+            padding: 12px;
+            font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            color: #e8eaed;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal-body::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+            border-radius: 4px;
+        }
+
+        .terminal-prompt {
+            color: #4ade80;
+        }
+
+        .terminal-command {
+            color: #ffffff;
+        }
+
+        .terminal-output {
+            color: #d4d4d4;
+        }
+
+        .terminal-stats {
+            color: #fbbf24;
+        }
+
+        .terminal-error {
+            color: #ff6b6b;
+        }
+
+        .show-terminal-btn {
+            background: none;
+            border: 1px solid #3a3a3a;
+            color: #6c7280;
+            padding: 6px 12px;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .show-terminal-btn:hover {
+            border-color: #00a8ff;
+            color: #00a8ff;
+        }
+
         @media (max-width: 1400px) {
             .charts-container {
                 grid-template-columns: 1fr;
@@ -544,6 +643,16 @@
                                 <div class="latency-stat-label">抖動</div>
                             </div>
                         </div>
+                    </div>
+                    <button class="show-terminal-btn" id="showTerminalBtn">顯示測試過程</button>
+                    <div class="terminal" id="pingTerminal" style="display: none;">
+                        <div class="terminal-header">
+                            <span class="terminal-btn close"></span>
+                            <span class="terminal-btn minimize"></span>
+                            <span class="terminal-btn maximize"></span>
+                            <span class="terminal-title">Terminal — ping</span>
+                        </div>
+                        <div class="terminal-body" id="terminalOutput"></div>
                     </div>
                 </div>
 
@@ -726,6 +835,10 @@
         const networkInfoBtn = document.getElementById('networkInfoBtn');
         const modalClose = document.getElementById('modalClose');
         const retestBtn = document.getElementById('retestBtn');
+        const showTerminalBtn = document.getElementById('showTerminalBtn');
+        const pingTerminal = document.getElementById('pingTerminal');
+        const terminalOutput = document.getElementById('terminalOutput');
+        let terminalVisible = false;
 
         // Open modal
         networkInfoBtn.addEventListener('click', () => {
@@ -754,6 +867,13 @@
             }
         });
 
+        // Toggle terminal visibility
+        showTerminalBtn.addEventListener('click', () => {
+            terminalVisible = !terminalVisible;
+            pingTerminal.style.display = terminalVisible ? 'block' : 'none';
+            showTerminalBtn.textContent = terminalVisible ? '隱藏測試過程' : '顯示測試過程';
+        });
+
         // Retest button
         retestBtn.addEventListener('click', () => {
             runLatencyTest();
@@ -772,7 +892,8 @@
                 document.getElementById('ipTimezone').textContent = data.timezone || '未知';
                 document.getElementById('ipISP').textContent = data.org || '未知';
                 document.getElementById('ipOrg').textContent = data.org || '未知';
-                document.getElementById('ipAS').textContent = data.asn ? 'AS' + data.asn : '未知';
+                const asn = data.asn ? String(data.asn) : '';
+                document.getElementById('ipAS').textContent = asn ? (asn.startsWith('AS') ? asn : 'AS' + asn) : '未知';
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
                 document.getElementById('ipAddress').textContent = '無法取得';
@@ -804,9 +925,14 @@
             jitterEl.textContent = '--';
 
             const latencies = [];
-            // Using a small image from the vProxy Cloud server for latency test
-            const testUrl = 'https://157.66.166.30/';
-            const numTests = 5;
+            const testIP = '157.66.166.30';
+            const testUrl = 'https://' + testIP + '/';
+            const numTests = 10;
+
+            // Clear terminal and show initial command
+            terminalOutput.innerHTML = '';
+            appendToTerminal(`<span class="terminal-prompt">user@local</span> <span class="terminal-command">ping ${testIP}</span>\n`);
+            appendToTerminal(`<span class="terminal-output">PING ${testIP} (${testIP}): HTTP request test</span>\n`);
 
             for (let i = 0; i < numTests; i++) {
                 try {
@@ -820,22 +946,38 @@
                         setTimeout(resolve, 5000); // 5s timeout
                     });
                     const end = performance.now();
-                    latencies.push(end - start);
+                    const latency = end - start;
+                    latencies.push(latency);
+
+                    // CLI output for each ping
+                    appendToTerminal(`<span class="terminal-output">seq=${i} time=${latency.toFixed(3)} ms</span>\n`);
                 } catch (error) {
                     console.error('Latency test failed:', error);
+                    appendToTerminal(`<span class="terminal-error">seq=${i} Request timeout</span>\n`);
                 }
 
                 // Small delay between tests
                 if (i < numTests - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 300));
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
             }
+
+            // Show statistics
+            appendToTerminal(`\n<span class="terminal-stats">--- ${testIP} ping statistics ---</span>\n`);
 
             if (latencies.length > 0) {
                 const avg = latencies.reduce((a, b) => a + b, 0) / latencies.length;
                 const min = Math.min(...latencies);
                 const max = Math.max(...latencies);
                 const jitter = max - min;
+                const packetLoss = ((numTests - latencies.length) / numTests * 100).toFixed(1);
+
+                // Calculate stddev
+                const variance = latencies.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / latencies.length;
+                const stddev = Math.sqrt(variance);
+
+                appendToTerminal(`<span class="terminal-output">${numTests} packets transmitted, ${latencies.length} packets received, ${packetLoss}% packet loss</span>\n`);
+                appendToTerminal(`<span class="terminal-output">round-trip min/avg/max/stddev = ${min.toFixed(3)}/${avg.toFixed(3)}/${max.toFixed(3)}/${stddev.toFixed(3)} ms</span>\n`);
 
                 avgLatencyEl.textContent = avg.toFixed(1);
                 minLatencyEl.textContent = min.toFixed(1);
@@ -851,12 +993,19 @@
                     avgLatencyEl.classList.add('bad');
                 }
             } else {
+                appendToTerminal(`<span class="terminal-error">${numTests} packets transmitted, 0 packets received, 100% packet loss</span>\n`);
                 avgLatencyEl.textContent = '失敗';
                 avgLatencyEl.classList.add('bad');
             }
 
             retestBtn.disabled = false;
             retestBtn.classList.remove('spinning');
+        }
+
+        // Helper function to append text to terminal
+        function appendToTerminal(html) {
+            terminalOutput.innerHTML += html;
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
         // Detect browser and device information
