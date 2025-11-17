@@ -887,46 +887,57 @@
                 const primaryIP = primaryData.ip || '';
                 const isPrimaryIPv6 = primaryIP.includes(':');
 
-                // Try to fetch IPv4 specifically (even if primary is IPv6)
-                try {
-                    const ipv4Response = await fetch('https://api.ipify.org?format=json');
-                    const ipv4Result = await ipv4Response.json();
-                    if (ipv4Result.ip && !ipv4Result.ip.includes(':')) {
-                        // Get full info for IPv4
-                        const ipv4InfoResponse = await fetch(`https://ipapi.co/${ipv4Result.ip}/json/`);
-                        ipv4Data = await ipv4InfoResponse.json();
-                    }
-                } catch (e) {
-                    console.log('IPv4 fetch failed:', e);
-                }
-
-                // Try to fetch IPv6 specifically
-                try {
-                    const ipv6Response = await fetch('https://api64.ipify.org?format=json');
-                    const ipv6Result = await ipv6Response.json();
-                    if (ipv6Result.ip && ipv6Result.ip.includes(':')) {
-                        ipv6Data = { ip: ipv6Result.ip };
-                        // Get prefix info if we have IPv6
-                        try {
-                            const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6Result.ip}/json/`);
-                            const ipv6Info = await ipv6InfoResponse.json();
-                            ipv6Data.network = ipv6Info.network;
-                        } catch (e) {
-                            console.log('IPv6 info fetch failed:', e);
-                        }
-                    }
-                } catch (e) {
-                    console.log('IPv6 fetch failed:', e);
-                }
-
-                // If primary is IPv6 but we got IPv4 data, use it
-                if (!ipv4Data && !isPrimaryIPv6) {
+                // Use primary data for the connected protocol (most accurate)
+                if (isPrimaryIPv6) {
+                    ipv6Data = primaryData;
+                } else {
                     ipv4Data = primaryData;
                 }
 
-                // If primary is IPv4 but we didn't get IPv6, that's fine
-                if (!ipv6Data && isPrimaryIPv6) {
-                    ipv6Data = { ip: primaryIP, network: primaryData.network };
+                // Try to fetch the other protocol's IP
+                if (isPrimaryIPv6) {
+                    // Primary is IPv6, try to get IPv4
+                    try {
+                        const ipv4Response = await fetch('https://api.ipify.org?format=json');
+                        const ipv4Result = await ipv4Response.json();
+                        if (ipv4Result.ip && !ipv4Result.ip.includes(':')) {
+                            ipv4Data = { ip: ipv4Result.ip, network: null };
+                            // Try to get prefix from a different source
+                            try {
+                                const ipv4InfoResponse = await fetch(`https://ipwhois.app/json/${ipv4Result.ip}`);
+                                const ipv4Info = await ipv4InfoResponse.json();
+                                if (ipv4Info.success !== false) {
+                                    // ipwhois doesn't provide exact prefix, we'll skip BGP for IPv4 in this case
+                                    // or use ip-api for more info
+                                }
+                            } catch (e) {
+                                console.log('IPv4 detailed info fetch failed:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('IPv4 fetch failed:', e);
+                    }
+                } else {
+                    // Primary is IPv4, try to get IPv6
+                    try {
+                        const ipv6Response = await fetch('https://api64.ipify.org?format=json');
+                        const ipv6Result = await ipv6Response.json();
+                        if (ipv6Result.ip && ipv6Result.ip.includes(':')) {
+                            ipv6Data = { ip: ipv6Result.ip, network: null };
+                            // Try to get IPv6 prefix info
+                            try {
+                                const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6Result.ip}/json/`);
+                                const ipv6Info = await ipv6InfoResponse.json();
+                                if (ipv6Info.network) {
+                                    ipv6Data.network = ipv6Info.network;
+                                }
+                            } catch (e) {
+                                console.log('IPv6 info fetch failed:', e);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('IPv6 fetch failed:', e);
+                    }
                 }
 
                 // Display connection type badge
@@ -957,6 +968,7 @@
                 document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
 
                 // BGP Graph - save prefixes for both IPv4 and IPv6
+                // Primary connection's prefix is most reliable
                 bgpPrefixes.ipv4 = ipv4Data && ipv4Data.network ? ipv4Data.network : null;
                 bgpPrefixes.ipv6 = ipv6Data && ipv6Data.network ? ipv6Data.network : null;
 
