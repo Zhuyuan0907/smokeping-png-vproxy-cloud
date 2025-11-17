@@ -893,16 +893,33 @@
                 if (isPrimaryIPv6) {
                     // Primary is IPv6, try to get IPv4
                     try {
-                        const ipv4Response = await fetch('https://api.ipify.org?format=json');
-                        const ipv4Result = await ipv4Response.json();
-                        if (ipv4Result.ip && !ipv4Result.ip.includes(':')) {
-                            ipv4Data = { ip: ipv4Result.ip, network: null };
-                            // Try to get prefix from ipapi.co
+                        // Use ipv4.icanhazip.com which only responds via IPv4
+                        const ipv4Response = await fetch('https://ipv4.icanhazip.com/');
+                        const ipv4Text = await ipv4Response.text();
+                        const ipv4IP = ipv4Text.trim();
+                        if (ipv4IP && !ipv4IP.includes(':')) {
+                            ipv4Data = { ip: ipv4IP, network: null };
+                            // Try to get prefix from ipinfo.io
                             try {
-                                const ipv4InfoResponse = await fetch(`https://ipapi.co/${ipv4Result.ip}/json/`);
+                                const ipv4InfoResponse = await fetch(`https://ipinfo.io/${ipv4IP}/json`);
                                 const ipv4Info = await ipv4InfoResponse.json();
-                                if (ipv4Info.network) {
-                                    ipv4Data.network = ipv4Info.network;
+                                // ipinfo.io provides org which contains ASN, we need to extract prefix
+                                // Try BGP.tools API for prefix
+                                if (ipv4Info.org) {
+                                    // Parse ASN from org field like "AS1659 Taiwan Academic Network"
+                                    const asnMatch = ipv4Info.org.match(/^AS(\d+)/);
+                                    if (asnMatch) {
+                                        // Use BGP.tools to get the prefix for this IP
+                                        try {
+                                            const bgpResponse = await fetch(`https://bgp.tools/api/pfx/ip/${ipv4IP}`);
+                                            const bgpData = await bgpResponse.json();
+                                            if (bgpData && bgpData.length > 0 && bgpData[0].CIDR) {
+                                                ipv4Data.network = bgpData[0].CIDR;
+                                            }
+                                        } catch (e) {
+                                            console.log('BGP.tools prefix fetch failed:', e);
+                                        }
+                                    }
                                 }
                             } catch (e) {
                                 console.log('IPv4 detailed info fetch failed:', e);
@@ -914,16 +931,17 @@
                 } else {
                     // Primary is IPv4, try to get IPv6
                     try {
-                        const ipv6Response = await fetch('https://api64.ipify.org?format=json');
-                        const ipv6Result = await ipv6Response.json();
-                        if (ipv6Result.ip && ipv6Result.ip.includes(':')) {
-                            ipv6Data = { ip: ipv6Result.ip, network: null };
-                            // Try to get IPv6 prefix info
+                        const ipv6Response = await fetch('https://ipv6.icanhazip.com/');
+                        const ipv6Text = await ipv6Response.text();
+                        const ipv6IP = ipv6Text.trim();
+                        if (ipv6IP && ipv6IP.includes(':')) {
+                            ipv6Data = { ip: ipv6IP, network: null };
+                            // Try to get IPv6 prefix info from BGP.tools
                             try {
-                                const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6Result.ip}/json/`);
-                                const ipv6Info = await ipv6InfoResponse.json();
-                                if (ipv6Info.network) {
-                                    ipv6Data.network = ipv6Info.network;
+                                const bgpResponse = await fetch(`https://bgp.tools/api/pfx/ip/${ipv6IP}`);
+                                const bgpData = await bgpResponse.json();
+                                if (bgpData && bgpData.length > 0 && bgpData[0].CIDR) {
+                                    ipv6Data.network = bgpData[0].CIDR;
                                 }
                             } catch (e) {
                                 console.log('IPv6 info fetch failed:', e);
