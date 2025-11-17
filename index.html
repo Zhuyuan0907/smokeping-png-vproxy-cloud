@@ -403,6 +403,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            position: relative;
         }
 
         .terminal-btn {
@@ -419,8 +420,9 @@
         .terminal-title {
             color: #6c7280;
             font-size: 10px;
-            margin-left: auto;
-            margin-right: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .terminal-body {
@@ -568,8 +570,13 @@
                         <button class="section-toggle" id="bgpToggle">show</button>
                     </div>
                     <div class="collapsible-content" id="bgpContent">
+                        <div style="margin-top: 10px;">
+                            <a id="bgpLink" href="#" target="_blank" style="color: #00a8ff; font-size: 10px; text-decoration: none;">
+                                在 bgp.tools 查看完整路由資訊 →
+                            </a>
+                        </div>
                         <div class="bgp-graph">
-                            <img id="bgpGraph" src="" alt="BGP Connectivity Graph">
+                            <img id="bgpGraph" src="" alt="BGP Connectivity Graph" onerror="this.style.display='none'">
                         </div>
                     </div>
                 </div>
@@ -838,10 +845,12 @@
                 document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
 
                 // BGP Graph
-                if (prefix && !isIPv6) {
+                if (prefix && !isIPv6 && data.asn) {
                     document.getElementById('bgpSection').style.display = 'block';
-                    const bgpUrl = `https://bgp.tools/prefix/${prefix}`;
-                    document.getElementById('bgpGraph').src = `https://bgp.tools/as/${data.asn}/bgp.svg`;
+                    const asnNumber = String(data.asn).replace(/^AS/i, '');
+                    document.getElementById('bgpLink').href = `https://bgp.tools/prefix/${prefix}#connectivity`;
+                    // Try to load AS connectivity graph
+                    document.getElementById('bgpGraph').src = `https://bgp.tools/as/${asnNumber}.svg`;
                 }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
