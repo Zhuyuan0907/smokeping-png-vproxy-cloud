@@ -899,27 +899,13 @@
                         const ipv4IP = ipv4Text.trim();
                         if (ipv4IP && !ipv4IP.includes(':')) {
                             ipv4Data = { ip: ipv4IP, network: null };
-                            // Try to get prefix from ipinfo.io
+                            // Try to get prefix from ip-api.com (free, no CORS issues)
                             try {
-                                const ipv4InfoResponse = await fetch(`https://ipinfo.io/${ipv4IP}/json`);
+                                const ipv4InfoResponse = await fetch(`https://ip-api.com/json/${ipv4IP}?fields=status,query,org,as,isp`);
                                 const ipv4Info = await ipv4InfoResponse.json();
-                                // ipinfo.io provides org which contains ASN, we need to extract prefix
-                                // Try BGP.tools API for prefix
-                                if (ipv4Info.org) {
-                                    // Parse ASN from org field like "AS1659 Taiwan Academic Network"
-                                    const asnMatch = ipv4Info.org.match(/^AS(\d+)/);
-                                    if (asnMatch) {
-                                        // Use BGP.tools to get the prefix for this IP
-                                        try {
-                                            const bgpResponse = await fetch(`https://bgp.tools/api/pfx/ip/${ipv4IP}`);
-                                            const bgpData = await bgpResponse.json();
-                                            if (bgpData && bgpData.length > 0 && bgpData[0].CIDR) {
-                                                ipv4Data.network = bgpData[0].CIDR;
-                                            }
-                                        } catch (e) {
-                                            console.log('BGP.tools prefix fetch failed:', e);
-                                        }
-                                    }
+                                if (ipv4Info.status === 'success' && ipv4Info.as) {
+                                    // ip-api doesn't provide prefix directly, so we skip BGP graph for secondary protocol
+                                    // The main protocol (primary) will have accurate prefix from ipapi.co
                                 }
                             } catch (e) {
                                 console.log('IPv4 detailed info fetch failed:', e);
@@ -936,12 +922,12 @@
                         const ipv6IP = ipv6Text.trim();
                         if (ipv6IP && ipv6IP.includes(':')) {
                             ipv6Data = { ip: ipv6IP, network: null };
-                            // Try to get IPv6 prefix info from BGP.tools
+                            // Try to get IPv6 prefix info from ipapi.co
                             try {
-                                const bgpResponse = await fetch(`https://bgp.tools/api/pfx/ip/${ipv6IP}`);
-                                const bgpData = await bgpResponse.json();
-                                if (bgpData && bgpData.length > 0 && bgpData[0].CIDR) {
-                                    ipv6Data.network = bgpData[0].CIDR;
+                                const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6IP}/json/`);
+                                const ipv6Info = await ipv6InfoResponse.json();
+                                if (ipv6Info.network) {
+                                    ipv6Data.network = ipv6Info.network;
                                 }
                             } catch (e) {
                                 console.log('IPv6 info fetch failed:', e);
@@ -1017,7 +1003,6 @@
 
             currentBgpType = type;
             const bgpUrl = `https://bgp.tools/prefix/${prefix}`;
-            document.getElementById('bgpLink').href = bgpUrl;
             document.getElementById('bgpImageLink').href = bgpUrl;
 
             // Update switcher button states
