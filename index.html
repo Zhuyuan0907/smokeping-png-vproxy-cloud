@@ -52,6 +52,7 @@
         .time-selector {
             display: inline-flex;
             gap: 2px;
+            align-items: center;
         }
 
         .time-btn {
@@ -73,6 +74,26 @@
             color: #00a8ff;
             text-decoration: underline;
             text-underline-offset: 3px;
+        }
+
+        .separator {
+            color: #4a5568;
+            margin: 0 4px;
+        }
+
+        .network-info-btn {
+            padding: 4px 10px;
+            border: none;
+            background-color: transparent;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.15s ease;
+            font-weight: 500;
+        }
+
+        .network-info-btn:hover {
+            color: #00a8ff;
         }
 
         .refresh-info {
@@ -130,32 +151,6 @@
             padding: 5px;
         }
 
-        /* Network Info Button */
-        .network-info-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 48px;
-            height: 48px;
-            background: #3a3a3a;
-            border: 1px solid #4a4a4a;
-            border-radius: 50%;
-            color: #00a8ff;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .network-info-btn:hover {
-            background: #4a4a4a;
-            transform: scale(1.05);
-        }
-
         /* Modal Overlay */
         .modal-overlay {
             position: fixed;
@@ -183,6 +178,7 @@
         .modal-content {
             background: #1e1e1e;
             border: 1px solid #3a3a3a;
+            border-radius: 12px;
             width: 90%;
             max-width: 480px;
             max-height: 90vh;
@@ -248,6 +244,39 @@
             margin-bottom: 12px;
             padding-bottom: 6px;
             border-bottom: 1px solid #3a3a3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .retest-btn {
+            background: none;
+            border: none;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+
+        .retest-btn:hover {
+            color: #00a8ff;
+            transform: rotate(180deg);
+        }
+
+        .retest-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .retest-btn.spinning {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .info-grid {
@@ -293,16 +322,27 @@
             color: #ff6b6b;
         }
 
+        /* Loading Animation */
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
         /* Latency Display */
         .latency-display {
-            background: #2a2a2a;
-            padding: 16px;
             text-align: center;
-            border: 1px solid #3a3a3a;
+            padding: 12px 0;
         }
 
         .latency-value {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             color: #00a8ff;
             font-family: 'SF Mono', 'Consolas', monospace;
@@ -329,7 +369,7 @@
         }
 
         .latency-details {
-            margin-top: 12px;
+            margin-top: 16px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
@@ -341,7 +381,7 @@
 
         .latency-stat-value {
             color: #e8eaed;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             font-family: 'SF Mono', 'Consolas', monospace;
         }
@@ -350,29 +390,6 @@
             color: #6c7280;
             font-size: 9px;
             margin-top: 2px;
-        }
-
-        /* Test Button */
-        .retest-btn {
-            background: #3a3a3a;
-            border: 1px solid #4a4a4a;
-            color: #e8eaed;
-            padding: 8px 16px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 12px;
-            width: 100%;
-        }
-
-        .retest-btn:hover {
-            background: #4a4a4a;
-            color: #00a8ff;
-        }
-
-        .retest-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         @media (max-width: 1400px) {
@@ -422,6 +439,10 @@
                 font-size: 10px;
                 margin-bottom: 3px;
             }
+
+            .modal-content {
+                border-radius: 8px;
+            }
         }
     </style>
 </head>
@@ -436,6 +457,8 @@
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
             <button class="time-btn" data-range="10d">10d</button>
+            <span class="separator">|</span>
+            <button class="network-info-btn" id="networkInfoBtn">info</button>
         </div>
     </div>
 
@@ -451,11 +474,6 @@
         更新於 <span id="lastUpdate"></span>
     </div>
 
-    <!-- Network Info Button -->
-    <button class="network-info-btn" id="networkInfoBtn" title="網路資訊">
-        ⚡
-    </button>
-
     <!-- Network Info Modal -->
     <div class="modal-overlay" id="networkModal">
         <div class="modal-content">
@@ -470,42 +488,45 @@
                     <div class="info-grid">
                         <div class="info-item full-width">
                             <div class="info-label">IPv4 位址</div>
-                            <div class="info-value highlight" id="ipAddress">載入中...</div>
+                            <div class="info-value highlight" id="ipAddress"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">國家</div>
-                            <div class="info-value" id="ipCountry">載入中...</div>
+                            <div class="info-value" id="ipCountry"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">地區</div>
-                            <div class="info-value" id="ipRegion">載入中...</div>
+                            <div class="info-value" id="ipRegion"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">城市</div>
-                            <div class="info-value" id="ipCity">載入中...</div>
+                            <div class="info-value" id="ipCity"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">時區</div>
-                            <div class="info-value" id="ipTimezone">載入中...</div>
+                            <div class="info-value" id="ipTimezone"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item full-width">
                             <div class="info-label">網路服務商 (ISP)</div>
-                            <div class="info-value" id="ipISP">載入中...</div>
+                            <div class="info-value" id="ipISP"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">組織</div>
-                            <div class="info-value" id="ipOrg">載入中...</div>
+                            <div class="info-value" id="ipOrg"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">AS 編號</div>
-                            <div class="info-value" id="ipAS">載入中...</div>
+                            <div class="info-value" id="ipAS"><span class="loading-dots">載入中</span></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Latency Test -->
                 <div class="info-section">
-                    <div class="info-section-title">vProxy Cloud 延遲測試</div>
+                    <div class="info-section-title">
+                        <span>vProxy Cloud 延遲測試</span>
+                        <button class="retest-btn" id="retestBtn" title="重新測試">&#x21bb;</button>
+                    </div>
                     <div class="latency-display">
                         <div class="latency-value" id="avgLatency">--</div>
                         <div class="latency-label">平均延遲 (ms)</div>
@@ -524,28 +545,31 @@
                             </div>
                         </div>
                     </div>
-                    <button class="retest-btn" id="retestBtn">重新測試延遲</button>
                 </div>
 
-                <!-- Connection Info -->
+                <!-- Additional Network Info -->
                 <div class="info-section">
-                    <div class="info-section-title">連線狀態</div>
+                    <div class="info-section-title">額外資訊</div>
                     <div class="info-grid">
                         <div class="info-item">
-                            <div class="info-label">連線類型</div>
-                            <div class="info-value" id="connType">偵測中...</div>
+                            <div class="info-label">瀏覽器語言</div>
+                            <div class="info-value" id="browserLang">--</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">下行速度</div>
-                            <div class="info-value" id="connSpeed">偵測中...</div>
+                            <div class="info-label">螢幕解析度</div>
+                            <div class="info-value" id="screenRes">--</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">測試時間</div>
-                            <div class="info-value" id="testTime">--</div>
+                            <div class="info-label">裝置像素比</div>
+                            <div class="info-value" id="pixelRatio">--</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">測試次數</div>
-                            <div class="info-value" id="testCount">0 次</div>
+                            <div class="info-label">平台</div>
+                            <div class="info-value" id="platform">--</div>
+                        </div>
+                        <div class="info-item full-width">
+                            <div class="info-label">User Agent</div>
+                            <div class="info-value" id="userAgent" style="font-size: 10px;">--</div>
                         </div>
                     </div>
                 </div>
@@ -702,14 +726,13 @@
         const networkInfoBtn = document.getElementById('networkInfoBtn');
         const modalClose = document.getElementById('modalClose');
         const retestBtn = document.getElementById('retestBtn');
-        let testCount = 0;
 
         // Open modal
         networkInfoBtn.addEventListener('click', () => {
             networkModal.classList.add('active');
             fetchNetworkInfo();
             runLatencyTest();
-            detectConnectionInfo();
+            detectBrowserInfo();
         });
 
         // Close modal
@@ -736,24 +759,20 @@
             runLatencyTest();
         });
 
-        // Fetch IP information
+        // Fetch IP information using HTTPS API
         async function fetchNetworkInfo() {
             try {
-                const response = await fetch('http://ip-api.com/json/?fields=status,message,country,regionName,city,timezone,isp,org,as,query');
+                const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
 
-                if (data.status === 'success') {
-                    document.getElementById('ipAddress').textContent = data.query;
-                    document.getElementById('ipCountry').textContent = data.country || '未知';
-                    document.getElementById('ipRegion').textContent = data.regionName || '未知';
-                    document.getElementById('ipCity').textContent = data.city || '未知';
-                    document.getElementById('ipTimezone').textContent = data.timezone || '未知';
-                    document.getElementById('ipISP').textContent = data.isp || '未知';
-                    document.getElementById('ipOrg').textContent = data.org || '未知';
-                    document.getElementById('ipAS').textContent = data.as || '未知';
-                } else {
-                    throw new Error(data.message || 'API error');
-                }
+                document.getElementById('ipAddress').textContent = data.ip || '未知';
+                document.getElementById('ipCountry').textContent = data.country_name || '未知';
+                document.getElementById('ipRegion').textContent = data.region || '未知';
+                document.getElementById('ipCity').textContent = data.city || '未知';
+                document.getElementById('ipTimezone').textContent = data.timezone || '未知';
+                document.getElementById('ipISP').textContent = data.org || '未知';
+                document.getElementById('ipOrg').textContent = data.org || '未知';
+                document.getElementById('ipAS').textContent = data.asn ? 'AS' + data.asn : '未知';
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
                 document.getElementById('ipAddress').textContent = '無法取得';
@@ -768,34 +787,37 @@
             }
         }
 
-        // Run latency test
+        // Run latency test to vProxy Cloud IP
         async function runLatencyTest() {
             retestBtn.disabled = true;
-            retestBtn.textContent = '測試中...';
+            retestBtn.classList.add('spinning');
 
             const avgLatencyEl = document.getElementById('avgLatency');
             const minLatencyEl = document.getElementById('minLatency');
             const maxLatencyEl = document.getElementById('maxLatency');
             const jitterEl = document.getElementById('jitter');
-            const testTimeEl = document.getElementById('testTime');
-            const testCountEl = document.getElementById('testCount');
 
-            avgLatencyEl.textContent = '測試中...';
+            avgLatencyEl.innerHTML = '<span class="loading-dots">測試中</span>';
             avgLatencyEl.className = 'latency-value';
             minLatencyEl.textContent = '--';
             maxLatencyEl.textContent = '--';
             jitterEl.textContent = '--';
 
             const latencies = [];
-            const testUrl = 'https://smokeping.zhuyuan.tw/favicon.ico';
+            // Using a small image from the vProxy Cloud server for latency test
+            const testUrl = 'https://157.66.166.30/';
             const numTests = 5;
 
             for (let i = 0; i < numTests; i++) {
                 try {
                     const start = performance.now();
-                    await fetch(testUrl + '?_=' + Date.now() + Math.random(), {
-                        mode: 'no-cors',
-                        cache: 'no-store'
+                    // Using Image object for more reliable timing
+                    await new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = resolve;
+                        img.onerror = resolve; // Still count the time even on error
+                        img.src = testUrl + '?_=' + Date.now() + Math.random();
+                        setTimeout(resolve, 5000); // 5s timeout
                     });
                     const end = performance.now();
                     latencies.push(end - start);
@@ -805,7 +827,7 @@
 
                 // Small delay between tests
                 if (i < numTests - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 200));
+                    await new Promise(resolve => setTimeout(resolve, 300));
                 }
             }
 
@@ -833,34 +855,17 @@
                 avgLatencyEl.classList.add('bad');
             }
 
-            // Update test info
-            testCount++;
-            const now = new Date();
-            testTimeEl.textContent = now.toLocaleString('zh-TW', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            testCountEl.textContent = testCount + ' 次';
-
             retestBtn.disabled = false;
-            retestBtn.textContent = '重新測試延遲';
+            retestBtn.classList.remove('spinning');
         }
 
-        // Detect connection information
-        function detectConnectionInfo() {
-            const connTypeEl = document.getElementById('connType');
-            const connSpeedEl = document.getElementById('connSpeed');
-
-            if ('connection' in navigator) {
-                const conn = navigator.connection;
-                connTypeEl.textContent = conn.effectiveType ? conn.effectiveType.toUpperCase() : '未知';
-                connSpeedEl.textContent = conn.downlink ? conn.downlink + ' Mbps' : '未知';
-            } else {
-                connTypeEl.textContent = '不支援偵測';
-                connSpeedEl.textContent = '不支援偵測';
-            }
+        // Detect browser and device information
+        function detectBrowserInfo() {
+            document.getElementById('browserLang').textContent = navigator.language || navigator.userLanguage || '未知';
+            document.getElementById('screenRes').textContent = `${screen.width} x ${screen.height}`;
+            document.getElementById('pixelRatio').textContent = window.devicePixelRatio || 1;
+            document.getElementById('platform').textContent = navigator.platform || '未知';
+            document.getElementById('userAgent').textContent = navigator.userAgent || '未知';
         }
     </script>
 </body>
