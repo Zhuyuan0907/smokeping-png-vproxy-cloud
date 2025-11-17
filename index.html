@@ -630,11 +630,6 @@
                                 無法載入路由圖
                             </div>
                         </div>
-                        <div style="margin-top: 8px; text-align: center;">
-                            <a id="bgpLink" href="#" target="_blank" style="color: #00a8ff; font-size: 10px; text-decoration: none;">
-                                在 bgp.tools 查看完整路由資訊 →
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -902,13 +897,12 @@
                         const ipv4Result = await ipv4Response.json();
                         if (ipv4Result.ip && !ipv4Result.ip.includes(':')) {
                             ipv4Data = { ip: ipv4Result.ip, network: null };
-                            // Try to get prefix from a different source
+                            // Try to get prefix from ipapi.co
                             try {
-                                const ipv4InfoResponse = await fetch(`https://ipwhois.app/json/${ipv4Result.ip}`);
+                                const ipv4InfoResponse = await fetch(`https://ipapi.co/${ipv4Result.ip}/json/`);
                                 const ipv4Info = await ipv4InfoResponse.json();
-                                if (ipv4Info.success !== false) {
-                                    // ipwhois doesn't provide exact prefix, we'll skip BGP for IPv4 in this case
-                                    // or use ip-api for more info
+                                if (ipv4Info.network) {
+                                    ipv4Data.network = ipv4Info.network;
                                 }
                             } catch (e) {
                                 console.log('IPv4 detailed info fetch failed:', e);
