@@ -485,6 +485,36 @@
             opacity: 0.9;
         }
 
+        .bgp-switch-btn {
+            background: transparent;
+            border: 1px solid #3a3a3a;
+            color: #6c7280;
+            padding: 4px 12px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bgp-switch-btn:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .bgp-switch-btn:last-child {
+            border-radius: 0 4px 4px 0;
+            border-left: none;
+        }
+
+        .bgp-switch-btn:hover {
+            color: #00a8ff;
+            border-color: #00a8ff;
+        }
+
+        .bgp-switch-btn.active {
+            background: #00a8ff;
+            color: #000;
+            border-color: #00a8ff;
+        }
+
         .collapsible-content {
             max-height: 0;
             overflow: hidden;
@@ -585,6 +615,10 @@
                         <button class="section-toggle" id="bgpToggle">show</button>
                     </div>
                     <div class="collapsible-content" id="bgpContent">
+                        <div id="bgpSwitcher" style="display: none; margin-bottom: 10px; text-align: center;">
+                            <button class="bgp-switch-btn active" id="bgpIPv4Btn" data-type="ipv4">IPv4</button>
+                            <button class="bgp-switch-btn" id="bgpIPv6Btn" data-type="ipv6">IPv6</button>
+                        </div>
                         <div class="bgp-graph" id="bgpGraphContainer">
                             <div id="bgpLoading" style="padding: 20px; text-align: center; color: #6c7280; font-size: 11px;">
                                 <span class="loading-dots">載入 BGP 路徑圖</span>
@@ -742,6 +776,8 @@
         let countdownValue = 300;
         let countdownInterval;
         let userIPData = {};
+        let bgpPrefixes = { ipv4: null, ipv6: null };
+        let currentBgpType = 'ipv4';
 
         function loadCharts() {
             const content = document.getElementById('content');
@@ -920,40 +956,26 @@
                 const ispInfo = primaryData.org ? `${primaryData.org}` : '未知';
                 document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
 
-                // BGP Graph - use IPv4 prefix if available
-                const bgpPrefix = ipv4Data && ipv4Data.network ? ipv4Data.network : (ipv6Data && ipv6Data.network ? ipv6Data.network : null);
-                if (bgpPrefix && primaryData.asn) {
+                // BGP Graph - save prefixes for both IPv4 and IPv6
+                bgpPrefixes.ipv4 = ipv4Data && ipv4Data.network ? ipv4Data.network : null;
+                bgpPrefixes.ipv6 = ipv6Data && ipv6Data.network ? ipv6Data.network : null;
+
+                const hasIPv4 = bgpPrefixes.ipv4 !== null;
+                const hasIPv6 = bgpPrefixes.ipv6 !== null;
+
+                if ((hasIPv4 || hasIPv6) && primaryData.asn) {
                     document.getElementById('bgpSection').style.display = 'block';
-                    const bgpUrl = `https://bgp.tools/prefix/${bgpPrefix}`;
-                    document.getElementById('bgpLink').href = bgpUrl;
-                    document.getElementById('bgpImageLink').href = bgpUrl;
 
-                    // Try to load pathimg with UUID
-                    const pathimgPrefix = bgpPrefix.replace('/', '_');
-                    const uuid = crypto.randomUUID ? crypto.randomUUID() :
-                        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-                            const r = Math.random() * 16 | 0;
-                            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-                        });
+                    // Show switcher if both are available
+                    if (hasIPv4 && hasIPv6) {
+                        document.getElementById('bgpSwitcher').style.display = 'block';
+                    } else {
+                        document.getElementById('bgpSwitcher').style.display = 'none';
+                        currentBgpType = hasIPv4 ? 'ipv4' : 'ipv6';
+                    }
 
-                    const bgpImg = document.getElementById('bgpGraph');
-                    const bgpLoading = document.getElementById('bgpLoading');
-                    const bgpImageLink = document.getElementById('bgpImageLink');
-                    const bgpError = document.getElementById('bgpError');
-
-                    bgpImg.onload = () => {
-                        bgpLoading.style.display = 'none';
-                        bgpImageLink.style.display = 'block';
-                        bgpError.style.display = 'none';
-                    };
-
-                    bgpImg.onerror = () => {
-                        bgpLoading.style.display = 'none';
-                        bgpImageLink.style.display = 'none';
-                        bgpError.style.display = 'block';
-                    };
-
-                    bgpImg.src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}?${uuid}`;
+                    // Load initial BGP graph
+                    loadBgpGraph(currentBgpType);
                 }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
@@ -964,6 +986,61 @@
                 document.getElementById('ipISP').textContent = '無法取得';
             }
         }
+
+        function loadBgpGraph(type) {
+            const prefix = bgpPrefixes[type];
+            if (!prefix) return;
+
+            currentBgpType = type;
+            const bgpUrl = `https://bgp.tools/prefix/${prefix}`;
+            document.getElementById('bgpLink').href = bgpUrl;
+            document.getElementById('bgpImageLink').href = bgpUrl;
+
+            // Update switcher button states
+            document.getElementById('bgpIPv4Btn').classList.toggle('active', type === 'ipv4');
+            document.getElementById('bgpIPv6Btn').classList.toggle('active', type === 'ipv6');
+
+            // Try to load pathimg with UUID
+            const pathimgPrefix = prefix.replace('/', '_');
+            const uuid = crypto.randomUUID ? crypto.randomUUID() :
+                'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                    const r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+
+            const bgpImg = document.getElementById('bgpGraph');
+            const bgpLoading = document.getElementById('bgpLoading');
+            const bgpImageLink = document.getElementById('bgpImageLink');
+            const bgpError = document.getElementById('bgpError');
+
+            // Reset state
+            bgpLoading.style.display = 'block';
+            bgpImageLink.style.display = 'none';
+            bgpError.style.display = 'none';
+
+            bgpImg.onload = () => {
+                bgpLoading.style.display = 'none';
+                bgpImageLink.style.display = 'block';
+                bgpError.style.display = 'none';
+            };
+
+            bgpImg.onerror = () => {
+                bgpLoading.style.display = 'none';
+                bgpImageLink.style.display = 'none';
+                bgpError.style.display = 'block';
+            };
+
+            bgpImg.src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}?${uuid}`;
+        }
+
+        // BGP type switcher
+        document.getElementById('bgpIPv4Btn').addEventListener('click', () => {
+            if (bgpPrefixes.ipv4) loadBgpGraph('ipv4');
+        });
+
+        document.getElementById('bgpIPv6Btn').addEventListener('click', () => {
+            if (bgpPrefixes.ipv6) loadBgpGraph('ipv6');
+        });
 
         async function runLatencyTest() {
             const retestBtn = document.getElementById('retestBtn');
