@@ -815,42 +815,96 @@
 
         async function fetchNetworkInfo() {
             try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                userIPData = data;
+                // Fetch both IPv4 and IPv6 addresses separately
+                let ipv4Data = null;
+                let ipv6Data = null;
+                let primaryData = null;
 
-                const ip = data.ip || '';
-                const isIPv6 = ip.includes(':');
-                const prefix = data.network || '';
+                // Fetch primary connection info (what user is currently using)
+                const primaryResponse = await fetch('https://ipapi.co/json/');
+                primaryData = await primaryResponse.json();
+                userIPData = primaryData;
 
-                document.getElementById('connectionType').innerHTML = `<span class="connection-badge">${isIPv6 ? 'IPv6' : 'IPv4'}</span>`;
+                const primaryIP = primaryData.ip || '';
+                const isPrimaryIPv6 = primaryIP.includes(':');
 
-                if (isIPv6) {
-                    document.getElementById('ipv6Section').style.display = 'block';
-                    document.getElementById('ipv6Address').textContent = ip;
-                    document.getElementById('ipv6Prefix').textContent = prefix ? `Prefix: ${prefix}` : '';
-                    document.getElementById('ipv4Address').textContent = '不適用';
-                    document.getElementById('ipv4Prefix').textContent = '';
-                } else {
-                    document.getElementById('ipv4Address').textContent = ip;
-                    document.getElementById('ipv4Prefix').textContent = prefix ? `Prefix: ${prefix}` : '';
+                // Try to fetch IPv4 specifically (even if primary is IPv6)
+                try {
+                    const ipv4Response = await fetch('https://api.ipify.org?format=json');
+                    const ipv4Result = await ipv4Response.json();
+                    if (ipv4Result.ip && !ipv4Result.ip.includes(':')) {
+                        // Get full info for IPv4
+                        const ipv4InfoResponse = await fetch(`https://ipapi.co/${ipv4Result.ip}/json/`);
+                        ipv4Data = await ipv4InfoResponse.json();
+                    }
+                } catch (e) {
+                    console.log('IPv4 fetch failed:', e);
                 }
 
-                const location = [data.city, data.region, data.country_name].filter(Boolean).join(', ');
-                document.getElementById('ipLocation').textContent = location || '未知';
-                document.getElementById('ipTimezone').textContent = data.timezone || '未知';
+                // Try to fetch IPv6 specifically
+                try {
+                    const ipv6Response = await fetch('https://api64.ipify.org?format=json');
+                    const ipv6Result = await ipv6Response.json();
+                    if (ipv6Result.ip && ipv6Result.ip.includes(':')) {
+                        ipv6Data = { ip: ipv6Result.ip };
+                        // Get prefix info if we have IPv6
+                        try {
+                            const ipv6InfoResponse = await fetch(`https://ipapi.co/${ipv6Result.ip}/json/`);
+                            const ipv6Info = await ipv6InfoResponse.json();
+                            ipv6Data.network = ipv6Info.network;
+                        } catch (e) {
+                            console.log('IPv6 info fetch failed:', e);
+                        }
+                    }
+                } catch (e) {
+                    console.log('IPv6 fetch failed:', e);
+                }
 
-                const asn = data.asn ? (String(data.asn).startsWith('AS') ? data.asn : 'AS' + data.asn) : '';
-                const ispInfo = data.org ? `${data.org}` : '未知';
+                // If primary is IPv6 but we got IPv4 data, use it
+                if (!ipv4Data && !isPrimaryIPv6) {
+                    ipv4Data = primaryData;
+                }
+
+                // If primary is IPv4 but we didn't get IPv6, that's fine
+                if (!ipv6Data && isPrimaryIPv6) {
+                    ipv6Data = { ip: primaryIP, network: primaryData.network };
+                }
+
+                // Display connection type badge
+                document.getElementById('connectionType').innerHTML = `<span class="connection-badge">${isPrimaryIPv6 ? 'IPv6' : 'IPv4'}</span>`;
+
+                // Display IPv4 info
+                if (ipv4Data && ipv4Data.ip) {
+                    document.getElementById('ipv4Address').textContent = ipv4Data.ip;
+                    document.getElementById('ipv4Prefix').textContent = ipv4Data.network ? `Prefix: ${ipv4Data.network}` : '';
+                } else {
+                    document.getElementById('ipv4Address').textContent = '無 IPv4';
+                    document.getElementById('ipv4Prefix').textContent = '';
+                }
+
+                // Display IPv6 info
+                if (ipv6Data && ipv6Data.ip) {
+                    document.getElementById('ipv6Section').style.display = 'block';
+                    document.getElementById('ipv6Address').textContent = ipv6Data.ip;
+                    document.getElementById('ipv6Prefix').textContent = ipv6Data.network ? `Prefix: ${ipv6Data.network}` : '';
+                }
+
+                const location = [primaryData.city, primaryData.region, primaryData.country_name].filter(Boolean).join(', ');
+                document.getElementById('ipLocation').textContent = location || '未知';
+                document.getElementById('ipTimezone').textContent = primaryData.timezone || '未知';
+
+                const asn = primaryData.asn ? (String(primaryData.asn).startsWith('AS') ? primaryData.asn : 'AS' + primaryData.asn) : '';
+                const ispInfo = primaryData.org ? `${primaryData.org}` : '未知';
                 document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
 
-                // BGP Graph
-                if (prefix && !isIPv6 && data.asn) {
+                // BGP Graph - use IPv4 prefix if available
+                const bgpPrefix = ipv4Data && ipv4Data.network ? ipv4Data.network : (ipv6Data && ipv6Data.network ? ipv6Data.network : null);
+                if (bgpPrefix && primaryData.asn) {
                     document.getElementById('bgpSection').style.display = 'block';
-                    const asnNumber = String(data.asn).replace(/^AS/i, '');
-                    document.getElementById('bgpLink').href = `https://bgp.tools/prefix/${prefix}#connectivity`;
-                    // Try to load AS connectivity graph
-                    document.getElementById('bgpGraph').src = `https://bgp.tools/as/${asnNumber}.svg`;
+                    document.getElementById('bgpLink').href = `https://bgp.tools/prefix/${bgpPrefix}#connectivity`;
+                    // Use correct pathimg URL format: rt-{prefix with / replaced by _}
+                    const pathimgPrefix = bgpPrefix.replace('/', '_');
+                    document.getElementById('bgpGraph').src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}`;
                 }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
