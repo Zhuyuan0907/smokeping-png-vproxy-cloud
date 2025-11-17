@@ -477,6 +477,14 @@
             display: block;
         }
 
+        .bgp-graph a {
+            display: block;
+        }
+
+        .bgp-graph img:hover {
+            opacity: 0.9;
+        }
+
         .collapsible-content {
             max-height: 0;
             overflow: hidden;
@@ -577,8 +585,16 @@
                         <button class="section-toggle" id="bgpToggle">show</button>
                     </div>
                     <div class="collapsible-content" id="bgpContent">
-                        <div class="bgp-graph">
-                            <iframe id="bgpFrame" src="" title="BGP Connectivity Graph"></iframe>
+                        <div class="bgp-graph" id="bgpGraphContainer">
+                            <div id="bgpLoading" style="padding: 20px; text-align: center; color: #6c7280; font-size: 11px;">
+                                <span class="loading-dots">載入 BGP 路徑圖</span>
+                            </div>
+                            <a id="bgpImageLink" href="#" target="_blank" style="display: none;">
+                                <img id="bgpGraph" src="" alt="BGP Connectivity Graph" style="cursor: pointer;">
+                            </a>
+                            <div id="bgpError" style="display: none; padding: 20px; text-align: center; color: #9ca3af; font-size: 11px;">
+                                無法載入路由圖
+                            </div>
                         </div>
                         <div style="margin-top: 8px; text-align: center;">
                             <a id="bgpLink" href="#" target="_blank" style="color: #00a8ff; font-size: 10px; text-decoration: none;">
@@ -910,8 +926,34 @@
                     document.getElementById('bgpSection').style.display = 'block';
                     const bgpUrl = `https://bgp.tools/prefix/${bgpPrefix}`;
                     document.getElementById('bgpLink').href = bgpUrl;
-                    // Embed the BGP.tools page directly using iframe
-                    document.getElementById('bgpFrame').src = bgpUrl;
+                    document.getElementById('bgpImageLink').href = bgpUrl;
+
+                    // Try to load pathimg with UUID
+                    const pathimgPrefix = bgpPrefix.replace('/', '_');
+                    const uuid = crypto.randomUUID ? crypto.randomUUID() :
+                        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                            const r = Math.random() * 16 | 0;
+                            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                        });
+
+                    const bgpImg = document.getElementById('bgpGraph');
+                    const bgpLoading = document.getElementById('bgpLoading');
+                    const bgpImageLink = document.getElementById('bgpImageLink');
+                    const bgpError = document.getElementById('bgpError');
+
+                    bgpImg.onload = () => {
+                        bgpLoading.style.display = 'none';
+                        bgpImageLink.style.display = 'block';
+                        bgpError.style.display = 'none';
+                    };
+
+                    bgpImg.onerror = () => {
+                        bgpLoading.style.display = 'none';
+                        bgpImageLink.style.display = 'none';
+                        bgpError.style.display = 'block';
+                    };
+
+                    bgpImg.src = `https://bgp.tools/pathimg/rt-${pathimgPrefix}?${uuid}`;
                 }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
