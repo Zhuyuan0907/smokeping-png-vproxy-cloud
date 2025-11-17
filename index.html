@@ -21,7 +21,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             padding: 5px;
         }
 
@@ -34,8 +34,8 @@
         }
 
         .subtitle {
-            color: #8b92a6;
-            font-size: 12px;
+            color: #6c7280;
+            font-size: 11px;
             font-weight: 400;
         }
 
@@ -43,24 +43,35 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 20px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
             padding: 0;
         }
 
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-label {
+            color: #6c7280;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
         .time-selector {
             display: inline-flex;
-            gap: 3px;
+            gap: 2px;
         }
 
         .time-btn {
-            padding: 5px 12px;
+            padding: 4px 10px;
             border: none;
             background-color: transparent;
             color: #6c7280;
             cursor: pointer;
-            border-radius: 4px;
             font-size: 11px;
             transition: all 0.15s ease;
             font-weight: 500;
@@ -71,15 +82,79 @@
         }
 
         .time-btn.active {
-            background: #00a8ff;
+            color: #00a8ff;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .target-selector {
+            position: relative;
+        }
+
+        .target-btn {
+            padding: 4px 10px;
+            border: none;
+            background-color: transparent;
+            color: #00a8ff;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .target-btn:hover {
+            color: #4fc3f7;
+        }
+
+        .target-btn::after {
+            content: '▾';
+            font-size: 9px;
+        }
+
+        .target-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #1e2530;
+            border: 1px solid #2d3748;
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .target-menu.show {
+            display: block;
+        }
+
+        .target-option {
+            padding: 8px 12px;
+            font-size: 11px;
+            color: #8b92a6;
+            cursor: pointer;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .target-option:last-child {
+            border-bottom: none;
+        }
+
+        .target-option:hover {
+            background: #2d3748;
             color: #ffffff;
         }
 
+        .target-option.active {
+            color: #00a8ff;
+        }
+
         .refresh-info {
-            color: #6c7280;
+            color: #4a5568;
             text-align: center;
             margin-bottom: 15px;
-            font-size: 11px;
+            font-size: 10px;
             padding: 5px;
         }
 
@@ -90,48 +165,42 @@
         .charts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
-            gap: 12px;
+            gap: 10px;
         }
 
         .chart-wrapper {
             background: transparent;
             padding: 0;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .chart-title {
-            color: #8b92a6;
-            font-size: 12px;
-            margin-bottom: 6px;
+            color: #6c7280;
+            font-size: 11px;
+            margin-bottom: 4px;
             font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0;
+            display: inline-block;
         }
 
-        .chart-title .icon {
-            width: 4px;
-            height: 4px;
-            background: #00a8ff;
-            border-radius: 50%;
-            box-shadow: 0 0 4px rgba(0, 168, 255, 0.4);
+        .chart-title::before {
+            content: '—';
+            color: #00a8ff;
+            margin-right: 6px;
         }
 
         .chart-wrapper img {
             width: 100%;
             height: auto;
             border: none;
-            border-radius: 4px;
             background-color: #ffffff;
             display: block;
         }
 
         .last-update {
-            color: #6c7280;
+            color: #4a5568;
             text-align: center;
             margin-top: 15px;
-            font-size: 10px;
+            font-size: 9px;
             padding: 5px;
         }
 
@@ -151,7 +220,7 @@
             }
 
             .subtitle {
-                font-size: 11px;
+                font-size: 10px;
             }
 
             .header {
@@ -160,26 +229,27 @@
             }
 
             .controls {
+                gap: 12px;
                 margin-bottom: 8px;
             }
 
             .refresh-info {
                 margin-bottom: 10px;
-                font-size: 10px;
+                font-size: 9px;
             }
 
             .charts-container {
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 8px;
             }
 
             .chart-wrapper {
-                margin-bottom: 10px;
+                margin-bottom: 8px;
             }
 
             .chart-title {
-                font-size: 11px;
-                margin-bottom: 5px;
+                font-size: 10px;
+                margin-bottom: 3px;
             }
         }
     </style>
@@ -191,15 +261,28 @@
     </div>
 
     <div class="controls">
-        <div class="time-selector">
-            <button class="time-btn active" data-range="3h">3 小時</button>
-            <button class="time-btn" data-range="30h">30 小時</button>
-            <button class="time-btn" data-range="10d">10 天</button>
+        <div class="control-group">
+            <span class="control-label">時間範圍</span>
+            <div class="time-selector">
+                <button class="time-btn active" data-range="3h">3h</button>
+                <button class="time-btn" data-range="30h">30h</button>
+                <button class="time-btn" data-range="10d">10d</button>
+            </div>
+        </div>
+        <div class="control-group">
+            <span class="control-label">監控目標</span>
+            <div class="target-selector">
+                <button class="target-btn" id="targetBtn">vProxy Cloud</button>
+                <div class="target-menu" id="targetMenu">
+                    <div class="target-option active" data-target="vproxy">vProxy Cloud</div>
+                    <div class="target-option" data-target="custom">自訂節點</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="refresh-info">
-        自動刷新：每 60 秒更新一次 | 下次更新：<span id="countdown">60</span> 秒
+        自動更新 <span id="countdown">300</span>s
     </div>
 
     <div id="content">
@@ -207,75 +290,93 @@
     </div>
 
     <div class="last-update">
-        最後更新時間：<span id="lastUpdate"></span>
+        更新於 <span id="lastUpdate"></span>
     </div>
 
     <script>
-        // 定義圖表資料結構（合併所有節點）
-        const chartData = {
-            '3h': [
-                { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-15%2017:25;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
-                { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo' },
-                { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd' },
-                { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hd3' },
-                { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~veetime' },
-                { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~tfnd' },
-                { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkbn' },
-                { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-15%2017:26;end=now;target=TW-Hosting.CoCo~hkt' }
-            ],
-            '30h': [
-                { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-14%2015:00;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
-                { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo' },
-                { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd' },
-                { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hd3' },
-                { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~veetime' },
-                { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~tfnd' },
-                { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkbn' },
-                { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-14%2015:01;end=now;target=TW-Hosting.CoCo~hkt' }
-            ],
-            '10d': [
-                { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
-                { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
-                { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
-                { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
-                { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
-                { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
-                { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=2025-11-05%2021:02;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
-                { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo' },
-                { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd' },
-                { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hd3' },
-                { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~veetime' },
-                { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~tfnd' },
-                { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkbn' },
-                { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=2025-11-05%2021:02;end=now;target=TW-Hosting.CoCo~hkt' }
-            ]
+        // 監控目標配置
+        const targets = {
+            'vproxy': {
+                name: 'vProxy Cloud',
+                charts: {
+                    '3h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.CoCo~hkt' }
+                    ],
+                    '30h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.CoCo~hkt' }
+                    ],
+                    '10d': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.CoCoDigit-2~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hkt' }
+                    ]
+                }
+            },
+            'custom': {
+                name: '自訂節點',
+                charts: {
+                    '3h': [],
+                    '30h': [],
+                    '10d': []
+                }
+            }
         };
 
         let currentRange = '3h';
-        let countdownValue = 60;
+        let currentTarget = 'vproxy';
+        let countdownValue = 300;
         let countdownInterval;
-        let autoRefreshInterval;
 
         // 載入所有圖表
         function loadCharts() {
             const content = document.getElementById('content');
             content.innerHTML = '';
 
-            const data = chartData[currentRange];
+            const data = targets[currentTarget].charts[currentRange];
 
-            // 直接顯示所有節點
+            if (data.length === 0) {
+                content.innerHTML = '<div style="text-align:center;color:#6c7280;padding:40px;font-size:12px;">尚未配置節點</div>';
+                updateLastUpdateTime();
+                return;
+            }
+
             const section = document.createElement('div');
             section.className = 'section';
             section.innerHTML = `<div class="charts-container" id="all-charts"></div>`;
@@ -288,7 +389,7 @@
 
                 const title = document.createElement('div');
                 title.className = 'chart-title';
-                title.innerHTML = `<span class="icon"></span>${chart.title}`;
+                title.textContent = chart.title;
 
                 const img = document.createElement('img');
                 img.src = chart.url + '&_=' + new Date().getTime();
@@ -307,9 +408,6 @@
         function updateLastUpdateTime() {
             const now = new Date();
             const timeString = now.toLocaleString('zh-TW', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
@@ -320,7 +418,7 @@
 
         // 倒數計時
         function startCountdown() {
-            countdownValue = 60;
+            countdownValue = 300;
             document.getElementById('countdown').textContent = countdownValue;
 
             if (countdownInterval) {
@@ -333,7 +431,7 @@
 
                 if (countdownValue <= 0) {
                     loadCharts();
-                    countdownValue = 60;
+                    countdownValue = 300;
                 }
             }, 1000);
         }
@@ -349,14 +447,35 @@
             });
         });
 
+        // 目標選擇器
+        const targetBtn = document.getElementById('targetBtn');
+        const targetMenu = document.getElementById('targetMenu');
+
+        targetBtn.addEventListener('click', () => {
+            targetMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.target-selector')) {
+                targetMenu.classList.remove('show');
+            }
+        });
+
+        document.querySelectorAll('.target-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.target-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                currentTarget = this.dataset.target;
+                targetBtn.textContent = targets[currentTarget].name;
+                targetMenu.classList.remove('show');
+                loadCharts();
+                startCountdown();
+            });
+        });
+
         // 初始載入
         loadCharts();
         startCountdown();
-
-        // 每 60 秒重新載入圖表
-        autoRefreshInterval = setInterval(() => {
-            loadCharts();
-        }, 60000);
     </script>
 </body>
 </html>
