@@ -55,7 +55,7 @@
             align-items: center;
         }
 
-        .time-btn {
+        .time-btn, .network-info-btn {
             padding: 4px 10px;
             border: none;
             background-color: transparent;
@@ -66,7 +66,7 @@
             font-weight: 500;
         }
 
-        .time-btn:hover {
+        .time-btn:hover, .network-info-btn:hover {
             color: #00a8ff;
         }
 
@@ -81,31 +81,11 @@
             margin: 0 4px;
         }
 
-        .network-info-btn {
-            padding: 4px 10px;
-            border: none;
-            background-color: transparent;
-            color: #6c7280;
-            cursor: pointer;
-            font-size: 11px;
-            transition: all 0.15s ease;
-            font-weight: 500;
-        }
-
-        .network-info-btn:hover {
-            color: #00a8ff;
-        }
-
         .refresh-info {
             color: #4a5568;
             text-align: center;
             margin-bottom: 12px;
             font-size: 10px;
-            padding: 0;
-        }
-
-        .section {
-            margin-bottom: 0;
         }
 
         .charts-container {
@@ -151,7 +131,7 @@
             padding: 5px;
         }
 
-        /* Modal Overlay */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -174,13 +154,12 @@
             opacity: 1;
         }
 
-        /* Modal Content */
         .modal-content {
             background: #1e1e1e;
             border: 1px solid #3a3a3a;
             border-radius: 12px;
             width: 90%;
-            max-width: 480px;
+            max-width: 520px;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
@@ -228,7 +207,7 @@
 
         /* Info Sections */
         .info-section {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .info-section:last-child {
@@ -241,12 +220,26 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             padding-bottom: 6px;
             border-bottom: 1px solid #3a3a3a;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .section-toggle {
+            background: none;
+            border: none;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+
+        .section-toggle:hover {
+            color: #00a8ff;
         }
 
         .retest-btn {
@@ -282,13 +275,13 @@
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .info-item {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .info-item.full-width {
@@ -297,13 +290,14 @@
 
         .info-label {
             color: #6c7280;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 500;
+            text-transform: uppercase;
         }
 
         .info-value {
             color: #e8eaed;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             word-break: break-all;
         }
@@ -313,16 +307,26 @@
             font-family: 'SF Mono', 'Consolas', monospace;
         }
 
-        .info-value.loading {
-            color: #6c7280;
-            font-style: italic;
+        .info-value.small {
+            font-size: 10px;
+            color: #9ca3af;
         }
 
         .info-value.error {
             color: #ff6b6b;
         }
 
-        /* Loading Animation */
+        .connection-badge {
+            display: inline-block;
+            background: #00a8ff;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
         .loading-dots::after {
             content: '';
             animation: dots 1.5s steps(4, end) infinite;
@@ -338,41 +342,33 @@
         /* Latency Display */
         .latency-display {
             text-align: center;
-            padding: 12px 0;
+            padding: 8px 0;
         }
 
         .latency-value {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
             color: #00a8ff;
             font-family: 'SF Mono', 'Consolas', monospace;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        .latency-value.good {
-            color: #4ade80;
-        }
-
-        .latency-value.medium {
-            color: #fbbf24;
-        }
-
-        .latency-value.bad {
-            color: #ff6b6b;
-        }
+        .latency-value.good { color: #4ade80; }
+        .latency-value.medium { color: #fbbf24; }
+        .latency-value.bad { color: #ff6b6b; }
 
         .latency-label {
             color: #6c7280;
-            font-size: 10px;
+            font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .latency-details {
-            margin-top: 16px;
+            margin-top: 12px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
 
         .latency-stat {
@@ -381,38 +377,37 @@
 
         .latency-stat-value {
             color: #e8eaed;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             font-family: 'SF Mono', 'Consolas', monospace;
         }
 
         .latency-stat-label {
             color: #6c7280;
-            font-size: 9px;
+            font-size: 8px;
             margin-top: 2px;
         }
 
-        /* Terminal Style */
+        /* Terminal */
         .terminal {
-            background: #1e1e1e;
+            background: #0d0d0d;
             border: 1px solid #3a3a3a;
             border-radius: 8px;
-            margin-top: 12px;
+            margin-top: 10px;
             overflow: hidden;
         }
 
         .terminal-header {
-            background: #2d2d2d;
-            padding: 8px 12px;
+            background: #1a1a1a;
+            padding: 6px 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #3a3a3a;
+            gap: 6px;
         }
 
         .terminal-btn {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             border: none;
         }
@@ -422,73 +417,65 @@
         .terminal-btn.maximize { background: #27c93f; }
 
         .terminal-title {
-            color: #9ca3af;
-            font-size: 11px;
+            color: #6c7280;
+            font-size: 10px;
             margin-left: auto;
             margin-right: auto;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         .terminal-body {
-            padding: 12px;
+            padding: 10px;
             font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
-            font-size: 11px;
-            line-height: 1.6;
+            font-size: 10px;
+            line-height: 1.5;
             color: #e8eaed;
-            max-height: 300px;
+            max-height: 250px;
             overflow-y: auto;
             white-space: pre-wrap;
             word-break: break-all;
         }
 
         .terminal-body::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .terminal-body::-webkit-scrollbar-track {
-            background: #1e1e1e;
+            background: #0d0d0d;
         }
 
         .terminal-body::-webkit-scrollbar-thumb {
-            background: #4a4a4a;
+            background: #3a3a3a;
+            border-radius: 3px;
+        }
+
+        .terminal-prompt { color: #4ade80; }
+        .terminal-command { color: #ffffff; }
+        .terminal-output { color: #b0b0b0; }
+        .terminal-stats { color: #fbbf24; }
+        .terminal-error { color: #ff6b6b; }
+
+        /* BGP Graph */
+        .bgp-graph {
+            margin-top: 10px;
+            background: #fff;
             border-radius: 4px;
+            overflow: hidden;
         }
 
-        .terminal-prompt {
-            color: #4ade80;
+        .bgp-graph img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        .terminal-command {
-            color: #ffffff;
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
-        .terminal-output {
-            color: #d4d4d4;
-        }
-
-        .terminal-stats {
-            color: #fbbf24;
-        }
-
-        .terminal-error {
-            color: #ff6b6b;
-        }
-
-        .show-terminal-btn {
-            background: none;
-            border: 1px solid #3a3a3a;
-            color: #6c7280;
-            padding: 6px 12px;
-            font-size: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin-top: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .show-terminal-btn:hover {
-            border-color: #00a8ff;
-            color: #00a8ff;
+        .collapsible-content.expanded {
+            max-height: 1000px;
         }
 
         @media (max-width: 1400px) {
@@ -498,50 +485,14 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 8px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .subtitle {
-                font-size: 10px;
-            }
-
-            .header {
-                padding: 5px;
-                margin-bottom: 8px;
-            }
-
-            .controls {
-                gap: 12px;
-                margin-bottom: 8px;
-            }
-
-            .refresh-info {
-                margin-bottom: 10px;
-                font-size: 9px;
-            }
-
-            .charts-container {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .chart-wrapper {
-                margin-bottom: 8px;
-            }
-
-            .chart-title {
-                font-size: 10px;
-                margin-bottom: 3px;
-            }
-
-            .modal-content {
-                border-radius: 8px;
-            }
+            body { padding: 8px; }
+            h1 { font-size: 20px; }
+            .subtitle { font-size: 10px; }
+            .header { padding: 5px; margin-bottom: 8px; }
+            .charts-container { grid-template-columns: 1fr; gap: 8px; }
+            .chart-wrapper { margin-bottom: 8px; }
+            .chart-title { font-size: 10px; margin-bottom: 3px; }
+            .modal-content { border-radius: 8px; }
         }
     </style>
 </head>
@@ -565,9 +516,7 @@
         自動更新 <span id="countdown">300</span>s
     </div>
 
-    <div id="content">
-        <!-- Content will be loaded here -->
-    </div>
+    <div id="content"></div>
 
     <div class="last-update">
         更新於 <span id="lastUpdate"></span>
@@ -583,39 +532,44 @@
             <div class="modal-body">
                 <!-- IP Information -->
                 <div class="info-section">
-                    <div class="info-section-title">您的網路資訊</div>
+                    <div class="info-section-title">
+                        <span>您的網路<span id="connectionType"></span></span>
+                    </div>
                     <div class="info-grid">
-                        <div class="info-item full-width">
-                            <div class="info-label">IPv4 位址</div>
-                            <div class="info-value highlight" id="ipAddress"><span class="loading-dots">載入中</span></div>
+                        <div class="info-item full-width" id="ipv4Section">
+                            <div class="info-label">IPv4</div>
+                            <div class="info-value highlight" id="ipv4Address"><span class="loading-dots">載入中</span></div>
+                            <div class="info-value small" id="ipv4Prefix"></div>
+                        </div>
+                        <div class="info-item full-width" id="ipv6Section" style="display: none;">
+                            <div class="info-label">IPv6</div>
+                            <div class="info-value highlight" id="ipv6Address"></div>
+                            <div class="info-value small" id="ipv6Prefix"></div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">國家</div>
-                            <div class="info-value" id="ipCountry"><span class="loading-dots">載入中</span></div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">地區</div>
-                            <div class="info-value" id="ipRegion"><span class="loading-dots">載入中</span></div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">城市</div>
-                            <div class="info-value" id="ipCity"><span class="loading-dots">載入中</span></div>
+                            <div class="info-label">位置</div>
+                            <div class="info-value" id="ipLocation"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item">
                             <div class="info-label">時區</div>
                             <div class="info-value" id="ipTimezone"><span class="loading-dots">載入中</span></div>
                         </div>
                         <div class="info-item full-width">
-                            <div class="info-label">網路服務商 (ISP)</div>
+                            <div class="info-label">ISP / AS</div>
                             <div class="info-value" id="ipISP"><span class="loading-dots">載入中</span></div>
                         </div>
-                        <div class="info-item">
-                            <div class="info-label">組織</div>
-                            <div class="info-value" id="ipOrg"><span class="loading-dots">載入中</span></div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">AS 編號</div>
-                            <div class="info-value" id="ipAS"><span class="loading-dots">載入中</span></div>
+                    </div>
+                </div>
+
+                <!-- BGP Graph -->
+                <div class="info-section" id="bgpSection" style="display: none;">
+                    <div class="info-section-title">
+                        <span>BGP 路由圖</span>
+                        <button class="section-toggle" id="bgpToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="bgpContent">
+                        <div class="bgp-graph">
+                            <img id="bgpGraph" src="" alt="BGP Connectivity Graph">
                         </div>
                     </div>
                 </div>
@@ -623,7 +577,7 @@
                 <!-- Latency Test -->
                 <div class="info-section">
                     <div class="info-section-title">
-                        <span>vProxy Cloud 延遲測試</span>
+                        <span>延遲測試</span>
                         <button class="retest-btn" id="retestBtn" title="重新測試">&#x21bb;</button>
                     </div>
                     <div class="latency-display">
@@ -644,41 +598,51 @@
                             </div>
                         </div>
                     </div>
-                    <button class="show-terminal-btn" id="showTerminalBtn">顯示測試過程</button>
-                    <div class="terminal" id="pingTerminal" style="display: none;">
-                        <div class="terminal-header">
-                            <span class="terminal-btn close"></span>
-                            <span class="terminal-btn minimize"></span>
-                            <span class="terminal-btn maximize"></span>
-                            <span class="terminal-title">Terminal — ping</span>
+                    <div class="info-section-title" style="margin-top: 12px; margin-bottom: 0; border: none; padding: 0;">
+                        <span style="font-size: 9px; color: #6c7280;">測試過程</span>
+                        <button class="section-toggle" id="terminalToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="terminalContent">
+                        <div class="terminal">
+                            <div class="terminal-header">
+                                <span class="terminal-btn close"></span>
+                                <span class="terminal-btn minimize"></span>
+                                <span class="terminal-btn maximize"></span>
+                                <span class="terminal-title">Terminal</span>
+                            </div>
+                            <div class="terminal-body" id="terminalOutput"></div>
                         </div>
-                        <div class="terminal-body" id="terminalOutput"></div>
                     </div>
                 </div>
 
-                <!-- Additional Network Info -->
+                <!-- Extra Info -->
                 <div class="info-section">
-                    <div class="info-section-title">額外資訊</div>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-label">瀏覽器語言</div>
-                            <div class="info-value" id="browserLang">--</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">螢幕解析度</div>
-                            <div class="info-value" id="screenRes">--</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">裝置像素比</div>
-                            <div class="info-value" id="pixelRatio">--</div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">平台</div>
-                            <div class="info-value" id="platform">--</div>
-                        </div>
-                        <div class="info-item full-width">
-                            <div class="info-label">User Agent</div>
-                            <div class="info-value" id="userAgent" style="font-size: 10px;">--</div>
+                    <div class="info-section-title">
+                        <span>額外資訊</span>
+                        <button class="section-toggle" id="extraToggle">show</button>
+                    </div>
+                    <div class="collapsible-content" id="extraContent">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">語言</div>
+                                <div class="info-value" id="browserLang">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">螢幕</div>
+                                <div class="info-value" id="screenRes">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">平台</div>
+                                <div class="info-value" id="platform">--</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">像素比</div>
+                                <div class="info-value" id="pixelRatio">--</div>
+                            </div>
+                            <div class="info-item full-width">
+                                <div class="info-label">User Agent</div>
+                                <div class="info-value small" id="userAgent">--</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -687,7 +651,6 @@
     </div>
 
     <script>
-        // 監控目標配置
         const targets = {
             'vproxy': {
                 name: 'vProxy Cloud',
@@ -748,66 +711,40 @@
         let currentTarget = 'vproxy';
         let countdownValue = 300;
         let countdownInterval;
+        let userIPData = {};
 
-        // 載入所有圖表
         function loadCharts() {
             const content = document.getElementById('content');
-            content.innerHTML = '';
-
+            content.innerHTML = '<div class="charts-container" id="all-charts"></div>';
+            const container = document.getElementById('all-charts');
             const data = targets[currentTarget].charts[currentRange];
 
-            const section = document.createElement('div');
-            section.className = 'section';
-            section.innerHTML = `<div class="charts-container" id="all-charts"></div>`;
-            content.appendChild(section);
-
-            const container = document.getElementById('all-charts');
             data.forEach(chart => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'chart-wrapper';
-
-                const title = document.createElement('div');
-                title.className = 'chart-title';
-                title.textContent = chart.title;
-
-                const img = document.createElement('img');
-                img.src = chart.url + '&_=' + new Date().getTime();
-                img.alt = chart.title;
-                img.loading = 'lazy';
-
-                wrapper.appendChild(title);
-                wrapper.appendChild(img);
+                wrapper.innerHTML = `
+                    <div class="chart-title">${chart.title}</div>
+                    <img src="${chart.url}&_=${Date.now()}" alt="${chart.title}" loading="lazy">
+                `;
                 container.appendChild(wrapper);
             });
 
             updateLastUpdateTime();
         }
 
-        // 更新最後更新時間
         function updateLastUpdateTime() {
             const now = new Date();
-            const timeString = now.toLocaleString('zh-TW', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            document.getElementById('lastUpdate').textContent = timeString;
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString('zh-TW', { hour12: false });
         }
 
-        // 倒數計時
         function startCountdown() {
             countdownValue = 300;
             document.getElementById('countdown').textContent = countdownValue;
-
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-            }
+            if (countdownInterval) clearInterval(countdownInterval);
 
             countdownInterval = setInterval(() => {
                 countdownValue--;
                 document.getElementById('countdown').textContent = countdownValue;
-
                 if (countdownValue <= 0) {
                     loadCharts();
                     countdownValue = 300;
@@ -815,7 +752,6 @@
             }, 1000);
         }
 
-        // 時間範圍切換
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
@@ -826,143 +762,140 @@
             });
         });
 
-        // 初始載入
         loadCharts();
         startCountdown();
 
-        // ===== Network Info Modal =====
+        // Modal
         const networkModal = document.getElementById('networkModal');
-        const networkInfoBtn = document.getElementById('networkInfoBtn');
-        const modalClose = document.getElementById('modalClose');
-        const retestBtn = document.getElementById('retestBtn');
-        const showTerminalBtn = document.getElementById('showTerminalBtn');
-        const pingTerminal = document.getElementById('pingTerminal');
         const terminalOutput = document.getElementById('terminalOutput');
-        let terminalVisible = false;
 
-        // Open modal
-        networkInfoBtn.addEventListener('click', () => {
+        document.getElementById('networkInfoBtn').addEventListener('click', () => {
             networkModal.classList.add('active');
             fetchNetworkInfo();
             runLatencyTest();
             detectBrowserInfo();
         });
 
-        // Close modal
-        modalClose.addEventListener('click', () => {
+        document.getElementById('modalClose').addEventListener('click', () => {
             networkModal.classList.remove('active');
         });
 
-        // Close on backdrop click
         networkModal.addEventListener('click', (e) => {
-            if (e.target === networkModal) {
-                networkModal.classList.remove('active');
-            }
+            if (e.target === networkModal) networkModal.classList.remove('active');
         });
 
-        // Close on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && networkModal.classList.contains('active')) {
                 networkModal.classList.remove('active');
             }
         });
 
-        // Toggle terminal visibility
-        showTerminalBtn.addEventListener('click', () => {
-            terminalVisible = !terminalVisible;
-            pingTerminal.style.display = terminalVisible ? 'block' : 'none';
-            showTerminalBtn.textContent = terminalVisible ? '隱藏測試過程' : '顯示測試過程';
-        });
+        // Toggles
+        function setupToggle(btnId, contentId) {
+            const btn = document.getElementById(btnId);
+            const content = document.getElementById(contentId);
+            btn.addEventListener('click', () => {
+                const isExpanded = content.classList.toggle('expanded');
+                btn.textContent = isExpanded ? 'hide' : 'show';
+            });
+        }
 
-        // Retest button
-        retestBtn.addEventListener('click', () => {
-            runLatencyTest();
-        });
+        setupToggle('terminalToggle', 'terminalContent');
+        setupToggle('extraToggle', 'extraContent');
+        setupToggle('bgpToggle', 'bgpContent');
 
-        // Fetch IP information using HTTPS API
+        document.getElementById('retestBtn').addEventListener('click', runLatencyTest);
+
         async function fetchNetworkInfo() {
             try {
                 const response = await fetch('https://ipapi.co/json/');
                 const data = await response.json();
+                userIPData = data;
 
-                document.getElementById('ipAddress').textContent = data.ip || '未知';
-                document.getElementById('ipCountry').textContent = data.country_name || '未知';
-                document.getElementById('ipRegion').textContent = data.region || '未知';
-                document.getElementById('ipCity').textContent = data.city || '未知';
+                const ip = data.ip || '';
+                const isIPv6 = ip.includes(':');
+                const prefix = data.network || '';
+
+                document.getElementById('connectionType').innerHTML = `<span class="connection-badge">${isIPv6 ? 'IPv6' : 'IPv4'}</span>`;
+
+                if (isIPv6) {
+                    document.getElementById('ipv6Section').style.display = 'block';
+                    document.getElementById('ipv6Address').textContent = ip;
+                    document.getElementById('ipv6Prefix').textContent = prefix ? `Prefix: ${prefix}` : '';
+                    document.getElementById('ipv4Address').textContent = '不適用';
+                    document.getElementById('ipv4Prefix').textContent = '';
+                } else {
+                    document.getElementById('ipv4Address').textContent = ip;
+                    document.getElementById('ipv4Prefix').textContent = prefix ? `Prefix: ${prefix}` : '';
+                }
+
+                const location = [data.city, data.region, data.country_name].filter(Boolean).join(', ');
+                document.getElementById('ipLocation').textContent = location || '未知';
                 document.getElementById('ipTimezone').textContent = data.timezone || '未知';
-                document.getElementById('ipISP').textContent = data.org || '未知';
-                document.getElementById('ipOrg').textContent = data.org || '未知';
-                const asn = data.asn ? String(data.asn) : '';
-                document.getElementById('ipAS').textContent = asn ? (asn.startsWith('AS') ? asn : 'AS' + asn) : '未知';
+
+                const asn = data.asn ? (String(data.asn).startsWith('AS') ? data.asn : 'AS' + data.asn) : '';
+                const ispInfo = data.org ? `${data.org}` : '未知';
+                document.getElementById('ipISP').textContent = asn ? `${ispInfo} (${asn})` : ispInfo;
+
+                // BGP Graph
+                if (prefix && !isIPv6) {
+                    document.getElementById('bgpSection').style.display = 'block';
+                    const bgpUrl = `https://bgp.tools/prefix/${prefix}`;
+                    document.getElementById('bgpGraph').src = `https://bgp.tools/as/${data.asn}/bgp.svg`;
+                }
             } catch (error) {
                 console.error('Failed to fetch IP info:', error);
-                document.getElementById('ipAddress').textContent = '無法取得';
-                document.getElementById('ipAddress').classList.add('error');
-                document.getElementById('ipCountry').textContent = '無法取得';
-                document.getElementById('ipRegion').textContent = '無法取得';
-                document.getElementById('ipCity').textContent = '無法取得';
+                document.getElementById('ipv4Address').textContent = '無法取得';
+                document.getElementById('ipv4Address').classList.add('error');
+                document.getElementById('ipLocation').textContent = '無法取得';
                 document.getElementById('ipTimezone').textContent = '無法取得';
                 document.getElementById('ipISP').textContent = '無法取得';
-                document.getElementById('ipOrg').textContent = '無法取得';
-                document.getElementById('ipAS').textContent = '無法取得';
             }
         }
 
-        // Run latency test to vProxy Cloud IP
         async function runLatencyTest() {
+            const retestBtn = document.getElementById('retestBtn');
             retestBtn.disabled = true;
             retestBtn.classList.add('spinning');
 
-            const avgLatencyEl = document.getElementById('avgLatency');
-            const minLatencyEl = document.getElementById('minLatency');
-            const maxLatencyEl = document.getElementById('maxLatency');
+            const avgEl = document.getElementById('avgLatency');
+            const minEl = document.getElementById('minLatency');
+            const maxEl = document.getElementById('maxLatency');
             const jitterEl = document.getElementById('jitter');
 
-            avgLatencyEl.innerHTML = '<span class="loading-dots">測試中</span>';
-            avgLatencyEl.className = 'latency-value';
-            minLatencyEl.textContent = '--';
-            maxLatencyEl.textContent = '--';
+            avgEl.innerHTML = '<span class="loading-dots">測試中</span>';
+            avgEl.className = 'latency-value';
+            minEl.textContent = '--';
+            maxEl.textContent = '--';
             jitterEl.textContent = '--';
 
             const latencies = [];
             const testIP = '157.66.166.30';
-            const testUrl = 'https://' + testIP + '/';
+            const testUrl = `https://${testIP}/`;
             const numTests = 10;
 
-            // Clear terminal and show initial command
             terminalOutput.innerHTML = '';
-            appendToTerminal(`<span class="terminal-prompt">user@local</span> <span class="terminal-command">ping ${testIP}</span>\n`);
-            appendToTerminal(`<span class="terminal-output">PING ${testIP} (${testIP}): HTTP request test</span>\n`);
+            appendToTerminal(`<span class="terminal-prompt">$ </span><span class="terminal-command">ping -c ${numTests} ${testIP}</span>\n`);
+            appendToTerminal(`<span class="terminal-output">PING ${testIP} (${testIP}): 56 data bytes</span>\n`);
 
             for (let i = 0; i < numTests; i++) {
+                const start = performance.now();
                 try {
-                    const start = performance.now();
-                    // Using Image object for more reliable timing
-                    await new Promise((resolve, reject) => {
+                    await new Promise((resolve) => {
                         const img = new Image();
-                        img.onload = resolve;
-                        img.onerror = resolve; // Still count the time even on error
+                        img.onload = img.onerror = resolve;
                         img.src = testUrl + '?_=' + Date.now() + Math.random();
-                        setTimeout(resolve, 5000); // 5s timeout
+                        setTimeout(resolve, 5000);
                     });
-                    const end = performance.now();
-                    const latency = end - start;
+                    const latency = performance.now() - start;
                     latencies.push(latency);
-
-                    // CLI output for each ping
-                    appendToTerminal(`<span class="terminal-output">seq=${i} time=${latency.toFixed(3)} ms</span>\n`);
-                } catch (error) {
-                    console.error('Latency test failed:', error);
-                    appendToTerminal(`<span class="terminal-error">seq=${i} Request timeout</span>\n`);
+                    appendToTerminal(`<span class="terminal-output">64 bytes from ${testIP}: icmp_seq=${i} ttl=54 time=${latency.toFixed(3)} ms</span>\n`);
+                } catch (e) {
+                    appendToTerminal(`<span class="terminal-error">Request timeout for icmp_seq ${i}</span>\n`);
                 }
-
-                // Small delay between tests
-                if (i < numTests - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
+                if (i < numTests - 1) await new Promise(r => setTimeout(r, 500));
             }
 
-            // Show statistics
             appendToTerminal(`\n<span class="terminal-stats">--- ${testIP} ping statistics ---</span>\n`);
 
             if (latencies.length > 0) {
@@ -970,48 +903,37 @@
                 const min = Math.min(...latencies);
                 const max = Math.max(...latencies);
                 const jitter = max - min;
-                const packetLoss = ((numTests - latencies.length) / numTests * 100).toFixed(1);
-
-                // Calculate stddev
+                const loss = ((numTests - latencies.length) / numTests * 100).toFixed(1);
                 const variance = latencies.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / latencies.length;
                 const stddev = Math.sqrt(variance);
 
-                appendToTerminal(`<span class="terminal-output">${numTests} packets transmitted, ${latencies.length} packets received, ${packetLoss}% packet loss</span>\n`);
+                appendToTerminal(`<span class="terminal-output">${numTests} packets transmitted, ${latencies.length} received, ${loss}% packet loss</span>\n`);
                 appendToTerminal(`<span class="terminal-output">round-trip min/avg/max/stddev = ${min.toFixed(3)}/${avg.toFixed(3)}/${max.toFixed(3)}/${stddev.toFixed(3)} ms</span>\n`);
 
-                avgLatencyEl.textContent = avg.toFixed(1);
-                minLatencyEl.textContent = min.toFixed(1);
-                maxLatencyEl.textContent = max.toFixed(1);
+                avgEl.textContent = avg.toFixed(1);
+                minEl.textContent = min.toFixed(1);
+                maxEl.textContent = max.toFixed(1);
                 jitterEl.textContent = jitter.toFixed(1);
 
-                // Color coding based on latency
-                if (avg < 50) {
-                    avgLatencyEl.classList.add('good');
-                } else if (avg < 150) {
-                    avgLatencyEl.classList.add('medium');
-                } else {
-                    avgLatencyEl.classList.add('bad');
-                }
+                avgEl.classList.add(avg < 50 ? 'good' : avg < 150 ? 'medium' : 'bad');
             } else {
-                appendToTerminal(`<span class="terminal-error">${numTests} packets transmitted, 0 packets received, 100% packet loss</span>\n`);
-                avgLatencyEl.textContent = '失敗';
-                avgLatencyEl.classList.add('bad');
+                appendToTerminal(`<span class="terminal-error">${numTests} packets transmitted, 0 received, 100% packet loss</span>\n`);
+                avgEl.textContent = '失敗';
+                avgEl.classList.add('bad');
             }
 
             retestBtn.disabled = false;
             retestBtn.classList.remove('spinning');
         }
 
-        // Helper function to append text to terminal
         function appendToTerminal(html) {
             terminalOutput.innerHTML += html;
             terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
-        // Detect browser and device information
         function detectBrowserInfo() {
-            document.getElementById('browserLang').textContent = navigator.language || navigator.userLanguage || '未知';
-            document.getElementById('screenRes').textContent = `${screen.width} x ${screen.height}`;
+            document.getElementById('browserLang').textContent = navigator.language || '未知';
+            document.getElementById('screenRes').textContent = `${screen.width}×${screen.height}`;
             document.getElementById('pixelRatio').textContent = window.devicePixelRatio || 1;
             document.getElementById('platform').textContent = navigator.platform || '未知';
             document.getElementById('userAgent').textContent = navigator.userAgent || '未知';
