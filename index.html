@@ -78,24 +78,27 @@
 
         .target-selector {
             padding: 4px 10px;
-            border: 1px solid #3a3a3a;
-            background-color: #1e1e1e;
-            color: #e8eaed;
+            border: none;
+            background-color: transparent;
+            color: #6c7280;
             cursor: pointer;
             font-size: 11px;
             font-weight: 500;
-            border-radius: 4px;
             transition: all 0.15s ease;
         }
 
         .target-selector:hover {
-            border-color: #00a8ff;
             color: #00a8ff;
         }
 
         .target-selector:focus {
             outline: none;
-            border-color: #00a8ff;
+            color: #00a8ff;
+        }
+
+        .target-selector option {
+            background-color: #2b2b2b;
+            color: #e8eaed;
         }
 
         .separator {
