@@ -55,7 +55,7 @@
             align-items: center;
         }
 
-        .time-btn, .network-info-btn, .target-btn {
+        .time-btn, .network-info-btn {
             padding: 4px 10px;
             border: none;
             background-color: transparent;
@@ -66,14 +66,36 @@
             font-weight: 500;
         }
 
-        .time-btn:hover, .network-info-btn:hover, .target-btn:hover {
+        .time-btn:hover, .network-info-btn:hover {
             color: #00a8ff;
         }
 
-        .time-btn.active, .target-btn.active {
+        .time-btn.active {
             color: #00a8ff;
             text-decoration: underline;
             text-underline-offset: 3px;
+        }
+
+        .target-selector {
+            padding: 4px 10px;
+            border: 1px solid #3a3a3a;
+            background-color: #1e1e1e;
+            color: #e8eaed;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+        }
+
+        .target-selector:hover {
+            border-color: #00a8ff;
+            color: #00a8ff;
+        }
+
+        .target-selector:focus {
+            outline: none;
+            border-color: #00a8ff;
         }
 
         .separator {
@@ -551,8 +573,10 @@
 
     <div class="controls">
         <div class="time-selector">
-            <button class="target-btn" data-target="vproxy">vProxy</button>
-            <button class="target-btn active" data-target="twds">TWDS</button>
+            <select class="target-selector" id="targetSelector">
+                <option value="vproxy">vProxy Cloud</option>
+                <option value="twds" selected>TWDS</option>
+            </select>
             <span class="separator">|</span>
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
@@ -639,7 +663,7 @@
                 <!-- Latency Test -->
                 <div class="info-section">
                     <div class="info-section-title">
-                        <span>延遲測試</span>
+                        <span>延遲測試 <span id="testTarget" style="color: #6c7280; font-size: 9px;"></span></span>
                         <button class="retest-btn" id="retestBtn" title="重新測試">&#x21bb;</button>
                     </div>
                     <div class="latency-display">
@@ -871,15 +895,18 @@
             }, 1000);
         }
 
-        document.querySelectorAll('.target-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentTarget = this.dataset.target;
-                loadCharts();
-                startCountdown();
-            });
+        document.getElementById('targetSelector').addEventListener('change', function() {
+            currentTarget = this.value;
+            loadCharts();
+            startCountdown();
+            updateTestTarget();
         });
+
+        function updateTestTarget() {
+            const testIP = targets[currentTarget].testIP;
+            const targetName = targets[currentTarget].name;
+            document.getElementById('testTarget').textContent = `(${targetName} - ${testIP})`;
+        }
 
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -900,6 +927,7 @@
 
         document.getElementById('networkInfoBtn').addEventListener('click', () => {
             networkModal.classList.add('active');
+            updateTestTarget();
             fetchNetworkInfo();
             runLatencyTest();
             detectBrowserInfo();
