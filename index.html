@@ -55,7 +55,7 @@
             align-items: center;
         }
 
-        .time-btn, .network-info-btn {
+        .time-btn, .network-info-btn, .target-btn {
             padding: 4px 10px;
             border: none;
             background-color: transparent;
@@ -66,11 +66,11 @@
             font-weight: 500;
         }
 
-        .time-btn:hover, .network-info-btn:hover {
+        .time-btn:hover, .network-info-btn:hover, .target-btn:hover {
             color: #00a8ff;
         }
 
-        .time-btn.active {
+        .time-btn.active, .target-btn.active {
             color: #00a8ff;
             text-decoration: underline;
             text-underline-offset: 3px;
@@ -551,6 +551,9 @@
 
     <div class="controls">
         <div class="time-selector">
+            <button class="target-btn" data-target="vproxy">vProxy</button>
+            <button class="target-btn active" data-target="twds">TWDS</button>
+            <span class="separator">|</span>
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
             <button class="time-btn" data-range="10d">10d</button>
@@ -867,6 +870,16 @@
                 }
             }, 1000);
         }
+
+        document.querySelectorAll('.target-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTarget = this.dataset.target;
+                loadCharts();
+                startCountdown();
+            });
+        });
 
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
