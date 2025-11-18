@@ -76,7 +76,7 @@
             text-underline-offset: 3px;
         }
 
-        .target-selector {
+        .target-switch-btn {
             padding: 4px 10px;
             border: none;
             background-color: transparent;
@@ -85,20 +85,57 @@
             font-size: 11px;
             font-weight: 500;
             transition: all 0.15s ease;
+            position: relative;
         }
 
-        .target-selector:hover {
+        .target-switch-btn:hover {
             color: #00a8ff;
         }
 
-        .target-selector:focus {
-            outline: none;
-            color: #00a8ff;
+        .target-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            min-width: 150px;
         }
 
-        .target-selector option {
-            background-color: #2b2b2b;
-            color: #e8eaed;
+        .target-menu.active {
+            display: block;
+        }
+
+        .target-menu-btn {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            border: none;
+            background-color: transparent;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+
+        .target-menu-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .target-menu-btn:hover {
+            color: #00a8ff;
+            background-color: #2a2a2a;
+        }
+
+        .target-menu-btn.active {
+            color: #00a8ff;
         }
 
         .separator {
@@ -576,10 +613,13 @@
 
     <div class="controls">
         <div class="time-selector">
-            <select class="target-selector" id="targetSelector">
-                <option value="vproxy">vProxy Cloud</option>
-                <option value="twds" selected>TWDS</option>
-            </select>
+            <div style="position: relative; display: inline-block;">
+                <button class="target-switch-btn" id="targetSwitchBtn">更換節點</button>
+                <div class="target-menu" id="targetMenu">
+                    <button class="target-menu-btn" data-target="vproxy">vProxy Cloud</button>
+                    <button class="target-menu-btn active" data-target="twds">TWDS</button>
+                </div>
+            </div>
             <span class="separator">|</span>
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
@@ -898,11 +938,40 @@
             }, 1000);
         }
 
-        document.getElementById('targetSelector').addEventListener('change', function() {
-            currentTarget = this.value;
-            loadCharts();
-            startCountdown();
-            updateTestTarget();
+        // Target switcher menu
+        const targetSwitchBtn = document.getElementById('targetSwitchBtn');
+        const targetMenu = document.getElementById('targetMenu');
+        const targetMenuBtns = document.querySelectorAll('.target-menu-btn');
+
+        targetSwitchBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            targetMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!targetMenu.contains(e.target) && e.target !== targetSwitchBtn) {
+                targetMenu.classList.remove('active');
+            }
+        });
+
+        targetMenuBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const target = this.dataset.target;
+                currentTarget = target;
+
+                // Update active state
+                targetMenuBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close menu
+                targetMenu.classList.remove('active');
+
+                // Load charts and update
+                loadCharts();
+                startCountdown();
+                updateTestTarget();
+            });
         });
 
         function updateTestTarget() {
