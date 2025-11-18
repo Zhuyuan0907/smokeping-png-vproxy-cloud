@@ -76,6 +76,68 @@
             text-underline-offset: 3px;
         }
 
+        .target-switch-btn {
+            padding: 4px 10px;
+            border: none;
+            background-color: transparent;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .target-switch-btn:hover {
+            color: #00a8ff;
+        }
+
+        .target-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            min-width: 150px;
+        }
+
+        .target-menu.active {
+            display: block;
+        }
+
+        .target-menu-btn {
+            display: block;
+            width: 100%;
+            padding: 6px 12px;
+            border: none;
+            background-color: transparent;
+            color: #6c7280;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            text-align: left;
+            margin-bottom: 4px;
+        }
+
+        .target-menu-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .target-menu-btn:hover {
+            color: #00a8ff;
+            background-color: #2a2a2a;
+        }
+
+        .target-menu-btn.active {
+            color: #00a8ff;
+        }
+
         .separator {
             color: #4a5568;
             margin: 0 4px;
@@ -531,6 +593,15 @@
             }
         }
 
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 1px solid #3a3a3a;
+            color: #6c7280;
+            font-size: 11px;
+        }
+
         @media (max-width: 768px) {
             body { padding: 8px; }
             h1 { font-size: 20px; }
@@ -545,12 +616,20 @@
 </head>
 <body>
     <div class="header">
-        <h1>vProxy Cloud 連線品質監測</h1>
+        <h1>更方便的連線品質監測</h1>
         <div class="subtitle">即時網路延遲監控與分析</div>
     </div>
 
     <div class="controls">
         <div class="time-selector">
+            <div style="position: relative; display: inline-block;">
+                <button class="target-switch-btn" id="targetSwitchBtn">更換節點</button>
+                <div class="target-menu" id="targetMenu">
+                    <button class="target-menu-btn active" data-target="vproxy">vProxy Cloud</button>
+                    <button class="target-menu-btn" data-target="twds">TWDS</button>
+                </div>
+            </div>
+            <span class="separator">|</span>
             <button class="time-btn active" data-range="3h">3h</button>
             <button class="time-btn" data-range="30h">30h</button>
             <button class="time-btn" data-range="10d">10d</button>
@@ -636,7 +715,7 @@
                 <!-- Latency Test -->
                 <div class="info-section">
                     <div class="info-section-title">
-                        <span>延遲測試</span>
+                        <span>延遲測試 <span id="testTarget" style="color: #6c7280; font-size: 9px;"></span></span>
                         <button class="retest-btn" id="retestBtn" title="重新測試">&#x21bb;</button>
                     </div>
                     <div class="latency-display">
@@ -713,6 +792,7 @@
         const targets = {
             'vproxy': {
                 name: 'vProxy Cloud',
+                testIP: '157.66.166.30',
                 charts: {
                     '3h': [
                         { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
@@ -761,6 +841,60 @@
                         { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~tfnd' },
                         { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hkbn' },
                         { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hkt' }
+                    ]
+                }
+            },
+            'twds': {
+                name: 'TWDS',
+                testIP: '103.147.22.36',
+                charts: {
+                    '3h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hkt' }
+                    ],
+                    '30h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hkt' }
+                    ],
+                    '10d': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hkt' }
                     ]
                 }
             }
@@ -813,6 +947,48 @@
             }, 1000);
         }
 
+        // Target switcher menu
+        const targetSwitchBtn = document.getElementById('targetSwitchBtn');
+        const targetMenu = document.getElementById('targetMenu');
+        const targetMenuBtns = document.querySelectorAll('.target-menu-btn');
+
+        targetSwitchBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            targetMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!targetMenu.contains(e.target) && e.target !== targetSwitchBtn) {
+                targetMenu.classList.remove('active');
+            }
+        });
+
+        targetMenuBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const target = this.dataset.target;
+                currentTarget = target;
+
+                // Update active state
+                targetMenuBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close menu
+                targetMenu.classList.remove('active');
+
+                // Load charts and update
+                loadCharts();
+                startCountdown();
+                updateTestTarget();
+            });
+        });
+
+        function updateTestTarget() {
+            const testIP = targets[currentTarget].testIP;
+            const targetName = targets[currentTarget].name;
+            document.getElementById('testTarget').textContent = `(${targetName} - ${testIP})`;
+        }
+
         document.querySelectorAll('.time-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
@@ -832,6 +1008,7 @@
 
         document.getElementById('networkInfoBtn').addEventListener('click', () => {
             networkModal.classList.add('active');
+            updateTestTarget();
             fetchNetworkInfo();
             runLatencyTest();
             detectBrowserInfo();
@@ -1068,7 +1245,7 @@
             jitterEl.textContent = '--';
 
             const latencies = [];
-            const testIP = '157.66.166.30';
+            const testIP = targets[currentTarget].testIP;
             const testUrl = `https://${testIP}/`;
             const numTests = 10;
 
@@ -1137,5 +1314,10 @@
             document.getElementById('userAgent').textContent = navigator.userAgent || '未知';
         }
     </script>
+
+    <div class="footer">
+        © 2025 Better Smokeping @zhuyuan.tw<br>
+        All rights reserved.
+    </div>
 </body>
 </html>
