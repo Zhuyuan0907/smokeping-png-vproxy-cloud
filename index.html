@@ -545,7 +545,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>vProxy Cloud 連線品質監測</h1>
+        <h1>更方便的連線品質監測</h1>
         <div class="subtitle">即時網路延遲監控與分析</div>
     </div>
 
@@ -713,6 +713,7 @@
         const targets = {
             'vproxy': {
                 name: 'vProxy Cloud',
+                testIP: '157.66.166.30',
                 charts: {
                     '3h': [
                         { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.CoCoDigit-2' },
@@ -763,11 +764,65 @@
                         { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.CoCo~hkt' }
                     ]
                 }
+            },
+            'twds': {
+                name: 'TWDS',
+                testIP: '103.147.22.36',
+                charts: {
+                    '3h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-3h;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-3h;end=now;target=TW-Hosting.TWDS~hkt' }
+                    ],
+                    '30h': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-30h;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-30h;end=now;target=TW-Hosting.TWDS~hkt' }
+                    ],
+                    '10d': [
+                        { title: '遠傳電信-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS' },
+                        { title: '大大寬頻-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~slave1' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~KevinHiNet' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~JasonHiNet' },
+                        { title: '中華浮動-台南', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~KevinTainanHiNet' },
+                        { title: '凱擘台固-屏東', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~TFN' },
+                        { title: '學術網路-宜大', url: 'https://smokeping.zhuyuan.tw/smokeping/?displaymode=a;start=now-10d;end=now;target=Hosting.Taiwan.TWDS~TANet' },
+                        { title: '大屯有線-遠傳', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS' },
+                        { title: '中華浮動-新北', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hd' },
+                        { title: '中華浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hd3' },
+                        { title: '大台中浮動-台中', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~veetime' },
+                        { title: '台灣固網-浮動', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~tfnd' },
+                        { title: '香港寬頻-香港', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hkbn' },
+                        { title: '香港寬頻-網上行', url: 'https://smokeping.fast-line.tw/?displaymode=a;start=now-10d;end=now;target=TW-Hosting.TWDS~hkt' }
+                    ]
+                }
             }
         };
 
         let currentRange = '3h';
-        let currentTarget = 'vproxy';
+        let currentTarget = 'twds';
         let countdownValue = 300;
         let countdownInterval;
         let userIPData = {};
@@ -1068,7 +1123,7 @@
             jitterEl.textContent = '--';
 
             const latencies = [];
-            const testIP = '157.66.166.30';
+            const testIP = targets[currentTarget].testIP;
             const testUrl = `https://${testIP}/`;
             const numTests = 10;
 
