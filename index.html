@@ -97,9 +97,10 @@
             top: 100%;
             left: 0;
             margin-top: 8px;
-            background-color: transparent;
-            border: none;
-            padding: 0;
+            background-color: #1e1e1e;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 8px;
             display: none;
             z-index: 1000;
             min-width: 150px;
@@ -592,6 +593,15 @@
             }
         }
 
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 1px solid #3a3a3a;
+            color: #6c7280;
+            font-size: 11px;
+        }
+
         @media (max-width: 768px) {
             body { padding: 8px; }
             h1 { font-size: 20px; }
@@ -615,8 +625,8 @@
             <div style="position: relative; display: inline-block;">
                 <button class="target-switch-btn" id="targetSwitchBtn">更換節點</button>
                 <div class="target-menu" id="targetMenu">
-                    <button class="target-menu-btn" data-target="vproxy">vProxy Cloud</button>
-                    <button class="target-menu-btn active" data-target="twds">TWDS</button>
+                    <button class="target-menu-btn active" data-target="vproxy">vProxy Cloud</button>
+                    <button class="target-menu-btn" data-target="twds">TWDS</button>
                 </div>
             </div>
             <span class="separator">|</span>
@@ -891,7 +901,7 @@
         };
 
         let currentRange = '3h';
-        let currentTarget = 'twds';
+        let currentTarget = 'vproxy';
         let countdownValue = 300;
         let countdownInterval;
         let userIPData = {};
@@ -1304,5 +1314,10 @@
             document.getElementById('userAgent').textContent = navigator.userAgent || '未知';
         }
     </script>
+
+    <div class="footer">
+        © 2025 Better Smokeping @zhuyuan.tw<br>
+        All rights reserved.
+    </div>
 </body>
 </html>
